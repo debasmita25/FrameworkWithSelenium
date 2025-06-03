@@ -1,0 +1,15 @@
+{"doLogin": [
+    {
+      "test_name":"To verify Login feature is working fine",
+      "username":"Fitto",
+	  "password":"",
+      "runmode": "y" 
+     },
+     {
+      "test_name":"To verify Login feature is working fine",
+      "username":"Fitto",
+	  "password":"",
+      "runmode": "y" 
+     }
+     ]
+	 }

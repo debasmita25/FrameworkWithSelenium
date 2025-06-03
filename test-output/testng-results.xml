@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="6" passed="6" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2025-06-02T12:52:43 IST" name="Suite" finished-at="2025-06-02T12:53:25 IST" duration-ms="41953">
+    <groups>
+    </groups>
+    <test started-at="2025-06-02T12:52:43 IST" name="Test1" finished-at="2025-06-02T12:52:54 IST" duration-ms="11334">
+      <class name="com.saucelab.test.TestClass1">
+        <test-method is-config="true" signature="setupLogger()[pri:0, instance:com.saucelab.test.TestClass1@48f278eb]" started-at="2025-06-02T12:52:43 IST" name="setupLogger" finished-at="2025-06-02T12:52:43 IST" duration-ms="502" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setupLogger -->
+        <test-method is-config="true" signature="setUpEnv(java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:com.saucelab.test.TestClass1@48f278eb]" started-at="2025-06-02T12:52:43 IST" name="setUpEnv" finished-at="2025-06-02T12:52:43 IST" duration-ms="0" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[chrome]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[windows]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[https://www.saucedemo.com/]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpEnv -->
+        <test-method signature="doLogin(java.util.HashMap)[pri:0, instance:com.saucelab.test.TestClass1@48f278eb]" started-at="2025-06-02T12:52:43 IST" name="doLogin" data-provider="getData" finished-at="2025-06-02T12:52:50 IST" duration-ms="6460" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=standard_user}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- doLogin -->
+        <test-method is-config="true" signature="removeLogger()[pri:0, instance:com.saucelab.test.TestClass1@48f278eb]" started-at="2025-06-02T12:52:50 IST" name="removeLogger" finished-at="2025-06-02T12:52:50 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- removeLogger -->
+        <test-method is-config="true" signature="setupLogger()[pri:0, instance:com.saucelab.test.TestClass1@48f278eb]" started-at="2025-06-02T12:52:50 IST" name="setupLogger" finished-at="2025-06-02T12:52:50 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setupLogger -->
+        <test-method is-config="true" signature="setUpEnv(java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:com.saucelab.test.TestClass1@48f278eb]" started-at="2025-06-02T12:52:50 IST" name="setUpEnv" finished-at="2025-06-02T12:52:50 IST" duration-ms="0" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[chrome]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[windows]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[https://www.saucedemo.com/]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpEnv -->
+        <test-method signature="doLogin(java.util.HashMap)[pri:0, instance:com.saucelab.test.TestClass1@48f278eb]" started-at="2025-06-02T12:52:50 IST" name="doLogin" data-provider="getData" finished-at="2025-06-02T12:52:54 IST" duration-ms="4303" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=visual_user}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- doLogin -->
+        <test-method is-config="true" signature="removeLogger()[pri:0, instance:com.saucelab.test.TestClass1@48f278eb]" started-at="2025-06-02T12:52:54 IST" name="removeLogger" finished-at="2025-06-02T12:52:54 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- removeLogger -->
+      </class> <!-- com.saucelab.test.TestClass1 -->
+    </test> <!-- Test1 -->
+    <test started-at="2025-06-02T12:52:54 IST" name="Test2" finished-at="2025-06-02T12:53:09 IST" duration-ms="14816">
+      <class name="com.saucelab.test.TestClass1">
+        <test-method is-config="true" signature="setupLogger()[pri:0, instance:com.saucelab.test.TestClass1@201a4587]" started-at="2025-06-02T12:52:54 IST" name="setupLogger" finished-at="2025-06-02T12:52:54 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setupLogger -->
+        <test-method is-config="true" signature="setUpEnv(java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:com.saucelab.test.TestClass1@201a4587]" started-at="2025-06-02T12:52:54 IST" name="setUpEnv" finished-at="2025-06-02T12:52:54 IST" duration-ms="1" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[edge]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[windows]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[https://www.saucedemo.com/]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpEnv -->
+        <test-method signature="doLogin(java.util.HashMap)[pri:0, instance:com.saucelab.test.TestClass1@201a4587]" started-at="2025-06-02T12:52:54 IST" name="doLogin" data-provider="getData" finished-at="2025-06-02T12:53:02 IST" duration-ms="7775" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=standard_user}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- doLogin -->
+        <test-method is-config="true" signature="removeLogger()[pri:0, instance:com.saucelab.test.TestClass1@201a4587]" started-at="2025-06-02T12:53:02 IST" name="removeLogger" finished-at="2025-06-02T12:53:02 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- removeLogger -->
+        <test-method is-config="true" signature="setupLogger()[pri:0, instance:com.saucelab.test.TestClass1@201a4587]" started-at="2025-06-02T12:53:02 IST" name="setupLogger" finished-at="2025-06-02T12:53:02 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setupLogger -->
+        <test-method is-config="true" signature="setUpEnv(java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:com.saucelab.test.TestClass1@201a4587]" started-at="2025-06-02T12:53:02 IST" name="setUpEnv" finished-at="2025-06-02T12:53:02 IST" duration-ms="1" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[edge]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[windows]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[https://www.saucedemo.com/]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpEnv -->
+        <test-method signature="doLogin(java.util.HashMap)[pri:0, instance:com.saucelab.test.TestClass1@201a4587]" started-at="2025-06-02T12:53:02 IST" name="doLogin" data-provider="getData" finished-at="2025-06-02T12:53:09 IST" duration-ms="7028" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=visual_user}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- doLogin -->
+        <test-method is-config="true" signature="removeLogger()[pri:0, instance:com.saucelab.test.TestClass1@201a4587]" started-at="2025-06-02T12:53:09 IST" name="removeLogger" finished-at="2025-06-02T12:53:09 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- removeLogger -->
+      </class> <!-- com.saucelab.test.TestClass1 -->
+    </test> <!-- Test2 -->
+    <test started-at="2025-06-02T12:53:09 IST" name="Test3" finished-at="2025-06-02T12:53:25 IST" duration-ms="15753">
+      <class name="com.saucelab.test.TestClass1">
+        <test-method is-config="true" signature="initializeExtentReport()[pri:0, instance:com.saucelab.test.TestClass1@47d9a273]" started-at="2025-06-02T12:52:43 IST" name="initializeExtentReport" finished-at="2025-06-02T12:52:43 IST" duration-ms="285" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- initializeExtentReport -->
+        <test-method is-config="true" signature="setupLogger()[pri:0, instance:com.saucelab.test.TestClass1@47d9a273]" started-at="2025-06-02T12:53:09 IST" name="setupLogger" finished-at="2025-06-02T12:53:09 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setupLogger -->
+        <test-method signature="doLogin(java.util.HashMap)[pri:0, instance:com.saucelab.test.TestClass1@47d9a273]" started-at="2025-06-02T12:53:09 IST" name="doLogin" data-provider="getData" finished-at="2025-06-02T12:53:17 IST" duration-ms="7852" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=standard_user}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- doLogin -->
+        <test-method is-config="true" signature="setUpEnv(java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:com.saucelab.test.TestClass1@47d9a273]" started-at="2025-06-02T12:53:09 IST" name="setUpEnv" finished-at="2025-06-02T12:53:09 IST" duration-ms="0" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[firefox]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[windows]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[https://www.saucedemo.com/]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpEnv -->
+        <test-method is-config="true" signature="setupLogger()[pri:0, instance:com.saucelab.test.TestClass1@47d9a273]" started-at="2025-06-02T12:53:17 IST" name="setupLogger" finished-at="2025-06-02T12:53:17 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setupLogger -->
+        <test-method is-config="true" signature="removeLogger()[pri:0, instance:com.saucelab.test.TestClass1@47d9a273]" started-at="2025-06-02T12:53:17 IST" name="removeLogger" finished-at="2025-06-02T12:53:17 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- removeLogger -->
+        <test-method is-config="true" signature="setUpEnv(java.lang.String,java.lang.String,java.lang.String)[pri:0, instance:com.saucelab.test.TestClass1@47d9a273]" started-at="2025-06-02T12:53:17 IST" name="setUpEnv" finished-at="2025-06-02T12:53:17 IST" duration-ms="3" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[firefox]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[windows]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[https://www.saucedemo.com/]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpEnv -->
+        <test-method signature="doLogin(java.util.HashMap)[pri:0, instance:com.saucelab.test.TestClass1@47d9a273]" started-at="2025-06-02T12:53:17 IST" name="doLogin" data-provider="getData" finished-at="2025-06-02T12:53:25 IST" duration-ms="7892" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=visual_user}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- doLogin -->
+        <test-method is-config="true" signature="removeLogger()[pri:0, instance:com.saucelab.test.TestClass1@47d9a273]" started-at="2025-06-02T12:53:25 IST" name="removeLogger" finished-at="2025-06-02T12:53:25 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- removeLogger -->
+        <test-method is-config="true" signature="flushExtentReport()[pri:0, instance:com.saucelab.test.TestClass1@47d9a273]" started-at="2025-06-02T12:53:25 IST" name="flushExtentReport" finished-at="2025-06-02T12:53:25 IST" duration-ms="325" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- flushExtentReport -->
+      </class> <!-- com.saucelab.test.TestClass1 -->
+    </test> <!-- Test3 -->
+  </suite> <!-- Suite -->
+</testng-results>
