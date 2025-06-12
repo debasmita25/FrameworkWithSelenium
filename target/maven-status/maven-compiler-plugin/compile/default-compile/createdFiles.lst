@@ -1,0 +1,3 @@
+com\saucelab\pageObjects\ProductPage.class
+com\saucelab\pageObjects\LoginPage.class
+com\saucelab\pageObjects\BasePage.class
