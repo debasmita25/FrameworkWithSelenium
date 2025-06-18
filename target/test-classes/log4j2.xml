@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" monitorInterval="30">
 	<properties>
-		<property name="basePath">./src/test/resources/logs</property>
+		<property name="basePath">./logs</property>
 	</properties>
 	<Appenders>
 		<!-- Console Appender -->

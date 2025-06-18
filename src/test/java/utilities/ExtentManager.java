@@ -1,5 +1,6 @@
 package utilities;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,12 +13,14 @@ import com.aventstack.extentreports.reporter.configuration.ViewName;
 public class ExtentManager {
 
     private static ExtentReports extent;
+    public static  File reportFile;
 
     public static synchronized ExtentReports getInstance() {
         if (extent == null) {
             String path = generateReportPath();
+            reportFile = new File(path);
           //Create HTML file and add Configuration
-    		ExtentSparkReporter htmlReporter=new ExtentSparkReporter(path);
+            ExtentSparkReporter htmlReporter=new ExtentSparkReporter(reportFile);
     	    htmlReporter.viewConfigurer().viewOrder().as(new ViewName[]{ViewName.DASHBOARD,ViewName.TEST,ViewName.LOG});
     		htmlReporter.config().setEncoding("utf-8");
     		htmlReporter.config().setDocumentTitle("Test Summary Report");
@@ -34,7 +37,7 @@ public class ExtentManager {
 
     private static String generateReportPath() {
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH_mm_ss"));
-        return Paths.get(System.getProperty("user.dir"),"src","test","resources","reports", "TestReport_" + timestamp + ".html").toString();
+        return Paths.get(System.getProperty("user.dir"),"target","reports", "TestReport_" + timestamp + ".html").toString();
     }
 
     public static void flushReports() {

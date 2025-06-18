@@ -1,13 +1,12 @@
 package com.practice.rough;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import utilities.DriverManager;
 
 public class FirstTest1 extends BaseTest {
 
@@ -15,10 +14,10 @@ public class FirstTest1 extends BaseTest {
 	public void doLogin(String username,String password,String browser) {
 		
 		openBrowser(browser);
-		getDriver().get("https://www.saucedemo.com/");
-		getDriver().findElement(By.id("user-name")).sendKeys(username);
-		getDriver().findElement(By.id("password")).sendKeys(password);
-		getDriver().findElement(By.id("login-button")).submit();
+		DriverManager.getDriver().get("https://www.saucedemo.com/");
+		DriverManager.getDriver().findElement(By.id("user-name")).sendKeys(username);
+		DriverManager.getDriver().findElement(By.id("password")).sendKeys(password);
+		DriverManager.getDriver().findElement(By.id("login-button")).submit();
 		
 		try {
 			Thread.sleep(1000);
@@ -27,7 +26,7 @@ public class FirstTest1 extends BaseTest {
 			e.printStackTrace();
 		}
 		
-		WebElement appLogo=getDriver().findElement(By.className("app_logo"));
+		WebElement appLogo=DriverManager.getDriver().findElement(By.className("app_logo"));
 		Assert.assertTrue(appLogo.isDisplayed());
 		
 		quitBrowser();

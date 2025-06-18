@@ -2,15 +2,8 @@ package com.saucelab.test;
 
 import java.util.HashMap;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -18,6 +11,7 @@ import com.practice.rough.BaseTest;
 import com.saucelab.pageObjects.LoginPage;
 import com.saucelab.pageObjects.ProductPage;
 
+import utilities.DriverManager;
 import utilities.JsonDataReader;
 
 public class TestClass1 extends BaseTest {
@@ -40,9 +34,9 @@ public class TestClass1 extends BaseTest {
 		}
 
 		openBrowser(browser);
-		getDriver().get(testurl);
+		DriverManager.getDriver().get(testurl);
 		info("URL launched");
-		LoginPage lp = new LoginPage(getDriver());
+		LoginPage lp = new LoginPage(DriverManager.getDriver());
 		info("Enter username : " + data.get("username"));
 		info("Enter password : " + data.get("password"));
 		ProductPage pp = lp.doLogin(data.get("username"), data.get("password"));
@@ -59,8 +53,9 @@ public class TestClass1 extends BaseTest {
 		// Assert.assertTrue(appLogo.isDisplayed());
 		sf.assertTrue(true);
 		info("App Logo Present");
-		quitBrowser();
+		
 		info("Browser closed...");
+		sf.assertAll();
 	}
 
 }

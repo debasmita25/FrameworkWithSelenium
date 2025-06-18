@@ -1,17 +1,12 @@
 package com.practice.rough;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.practice.rough.BaseTest;
 import com.saucelab.pageObjects.LoginPage;
 import com.saucelab.pageObjects.ProductPage;
+
+import utilities.DriverManager;
 
 public class FirstTest3 extends BaseTest {
 
@@ -19,9 +14,9 @@ public class FirstTest3 extends BaseTest {
 	public void doLogin(String username,String password,String browser) {
 		
 		openBrowser(browser);
-		getDriver().get("https://www.saucedemo.com/");
+		DriverManager.getDriver().get("https://www.saucedemo.com/");
 		info("URL launched");
-		LoginPage lp=new LoginPage(getDriver());
+		LoginPage lp=new LoginPage(DriverManager.getDriver());
 		ProductPage pp=lp.doLogin(username, password);
 		info("username and password entered and submitted");
 		//pp.displayTotalProductsNames();

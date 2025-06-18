@@ -3,11 +3,16 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.practice.rough.FirstTest">
+      <class name="com.saucelab.test.FailedTestClass">
         <methods>
-          <include name="doLogin" invocation-numbers="1"/>
+          <include name="flushExtentReport"/>
+          <include name="initializeExtentReport"/>
+          <include name="quitBrowser"/>
+          <include name="testFail"/>
+          <include name="removeLogger"/>
+          <include name="setupLogger"/>
         </methods>
-      </class> <!-- com.practice.rough.FirstTest -->
+      </class> <!-- com.saucelab.test.FailedTestClass -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

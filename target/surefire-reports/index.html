@@ -25,7 +25,7 @@
       <span class="top-banner-title-font">Test results</span>
       <button id="button" class="button">Switch Retro Theme</button> <!-- button -->
       <br/>
-      <span class="top-banner-font-1">1 suite</span>
+      <span class="top-banner-font-1">1 suite, 1 failed test</span>
     </div> <!-- top-banner-root -->
     <div class="navigator-root">
       <div class="navigator-suite-header">
@@ -39,7 +39,7 @@
         <div class="rounded-window">
           <div class="suite-header light-rounded-window-top">
             <a href="#" panel-name="suite-Suite" class="navigator-link">
-              <span class="suite-name border-passed">Suite</span>
+              <span class="suite-name border-failed">Suite</span>
             </a> <!-- navigator-link -->
           </div> <!-- suite-header light-rounded-window-top -->
           <div class="navigator-suite-content">
@@ -92,7 +92,21 @@
               <div class="suite-section-content">
                 <ul>
                   <li>
-                    <span class="method-stats">6 methods,   6 passed</span>
+                    <span class="method-stats">7 methods, 1 failed,   6 passed</span>
+                  </li>
+                  <li>
+                    <span class="method-list-title failed">Failed methods</span>
+                    <span class="show-or-hide-methods failed">
+                      <a href="#" panel-name="suite-Suite" class="hide-methods failed suite-Suite"> (hide)</a> <!-- hide-methods failed suite-Suite -->
+                      <a href="#" panel-name="suite-Suite" class="show-methods failed suite-Suite"> (show)</a> <!-- show-methods failed suite-Suite -->
+                    </span>
+                    <div class="method-list-content failed suite-Suite">
+                      <span>
+                        <img src="failed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Suite" title="com.saucelab.test.FailedTestClass" class="method navigator-link" hash-for-method="testFail">testFail</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                    </div> <!-- method-list-content failed suite-Suite -->
                   </li>
                   <li>
                     <span class="method-list-title passed">Passed methods</span>
@@ -113,12 +127,12 @@
                       <br/>
                       <span>
                         <img src="passed.png" width="3%"/>
-                        <a href="#" panel-name="suite-Suite" title="com.saucelab.test.TestClass1" class="method navigator-link" hash-for-method="doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=stand...)">doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=stand...)</a> <!-- method navigator-link -->
+                        <a href="#" panel-name="suite-Suite" title="com.saucelab.test.TestClass1" class="method navigator-link" hash-for-method="doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=visua...)">doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=visua...)</a> <!-- method navigator-link -->
                       </span>
                       <br/>
                       <span>
                         <img src="passed.png" width="3%"/>
-                        <a href="#" panel-name="suite-Suite" title="com.saucelab.test.TestClass1" class="method navigator-link" hash-for-method="doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=visua...)">doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=visua...)</a> <!-- method navigator-link -->
+                        <a href="#" panel-name="suite-Suite" title="com.saucelab.test.TestClass1" class="method navigator-link" hash-for-method="doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=stand...)">doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=stand...)</a> <!-- method navigator-link -->
                       </span>
                       <br/>
                       <span>
@@ -143,6 +157,30 @@
     <div class="wrapper">
       <div class="main-panel-root">
         <div panel-name="suite-Suite" class="panel Suite">
+          <div class="suite-Suite-class-failed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="failed.png"/>
+              <span class="class-name">com.saucelab.test.FailedTestClass</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="testFail">
+                  </a> <!-- testFail -->
+                  <span class="method-name">testFail</span>
+                  <div class="stack-trace">java.lang.AssertionError: Deliberate fail
+	at com.saucelab.test.FailedTestClass.testFail(FailedTestClass.java:21)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+... Removed 18 stack frames
+</div> <!-- stack-trace -->
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Suite-class-failed -->
           <div class="suite-Suite-class-passed">
             <div class="main-panel-header rounded-window-top">
               <img src="passed.png"/>
@@ -167,18 +205,18 @@
               </div> <!-- method -->
               <div class="method">
                 <div class="method-content">
-                  <a name="doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=stand...)">
-                  </a> <!-- doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=stand...) -->
-                  <span class="method-name">doLogin</span>
-                  <span class="parameters">({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=standard_user})</span>
-                </div> <!-- method-content -->
-              </div> <!-- method -->
-              <div class="method">
-                <div class="method-content">
                   <a name="doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=visua...)">
                   </a> <!-- doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=visua...) -->
                   <span class="method-name">doLogin</span>
                   <span class="parameters">({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=visual_user})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=stand...)">
+                  </a> <!-- doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=stand...) -->
+                  <span class="method-name">doLogin</span>
+                  <span class="parameters">({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=standard_user})</span>
                 </div> <!-- method-content -->
               </div> <!-- method -->
               <div class="method">
@@ -208,19 +246,20 @@
             <pre>
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;!DOCTYPE suite SYSTEM &quot;https://testng.org/testng-1.0.dtd&quot;&gt;
-&lt;suite thread-count=&quot;3&quot; parallel=&quot;methods&quot; name=&quot;Suite&quot; guice-stage=&quot;DEVELOPMENT&quot; verbose=&quot;0&quot;&gt;
+&lt;suite thread-count=&quot;3&quot; parallel=&quot;tests&quot; name=&quot;Suite&quot; guice-stage=&quot;DEVELOPMENT&quot; verbose=&quot;0&quot;&gt;
   &lt;listeners&gt;
     &lt;listener class-name=&quot;utilities.ExtentReportListener&quot;/&gt;
   &lt;/listeners&gt;
-  &lt;test thread-count=&quot;3&quot; parallel=&quot;methods&quot; name=&quot;Test1&quot; verbose=&quot;0&quot;&gt;
+  &lt;test thread-count=&quot;3&quot; parallel=&quot;tests&quot; name=&quot;Test1&quot; verbose=&quot;0&quot;&gt;
     &lt;parameter name=&quot;os&quot; value=&quot;windows&quot;/&gt;
     &lt;parameter name=&quot;browser&quot; value=&quot;chrome&quot;/&gt;
     &lt;parameter name=&quot;testurl&quot; value=&quot;https://www.saucedemo.com/&quot;/&gt;
     &lt;classes&gt;
       &lt;class name=&quot;com.saucelab.test.TestClass1&quot;/&gt;
+      &lt;class name=&quot;com.saucelab.test.FailedTestClass&quot;/&gt;
     &lt;/classes&gt;
   &lt;/test&gt; &lt;!-- Test1 --&gt;
-  &lt;test thread-count=&quot;3&quot; parallel=&quot;methods&quot; name=&quot;Test2&quot; verbose=&quot;0&quot;&gt;
+  &lt;test thread-count=&quot;3&quot; parallel=&quot;tests&quot; name=&quot;Test2&quot; verbose=&quot;0&quot;&gt;
     &lt;parameter name=&quot;os&quot; value=&quot;windows&quot;/&gt;
     &lt;parameter name=&quot;browser&quot; value=&quot;edge&quot;/&gt;
     &lt;parameter name=&quot;testurl&quot; value=&quot;https://www.saucedemo.com/&quot;/&gt;
@@ -228,7 +267,7 @@
       &lt;class name=&quot;com.saucelab.test.TestClass1&quot;/&gt;
     &lt;/classes&gt;
   &lt;/test&gt; &lt;!-- Test2 --&gt;
-  &lt;test thread-count=&quot;3&quot; parallel=&quot;methods&quot; name=&quot;Test3&quot; verbose=&quot;0&quot;&gt;
+  &lt;test thread-count=&quot;3&quot; parallel=&quot;tests&quot; name=&quot;Test3&quot; verbose=&quot;0&quot;&gt;
     &lt;parameter name=&quot;os&quot; value=&quot;windows&quot;/&gt;
     &lt;parameter name=&quot;browser&quot; value=&quot;firefox&quot;/&gt;
     &lt;parameter name=&quot;testurl&quot; value=&quot;https://www.saucedemo.com/&quot;/&gt;
@@ -247,7 +286,7 @@
           <div class="main-panel-content rounded-window-bottom">
             <ul>
               <li>
-                <span class="test-name">Test1 (1 class)</span>
+                <span class="test-name">Test1 (2 classes)</span>
               </li>
               <li>
                 <span class="test-name">Test2 (1 class)</span>
@@ -279,36 +318,40 @@ data.addColumn('number', 'Number');
 data.addColumn('string', 'Method');
 data.addColumn('string', 'Class');
 data.addColumn('number', 'Time (ms)');
-data.addRows(6);
+data.addRows(7);
 data.setCell(0, 0, 0)
 data.setCell(0, 1, 'doLogin')
 data.setCell(0, 2, 'com.saucelab.test.TestClass1')
-data.setCell(0, 3, 7335);
+data.setCell(0, 3, 9752);
 data.setCell(1, 0, 1)
 data.setCell(1, 1, 'doLogin')
 data.setCell(1, 2, 'com.saucelab.test.TestClass1')
-data.setCell(1, 3, 6659);
+data.setCell(1, 3, 7015);
 data.setCell(2, 0, 2)
 data.setCell(2, 1, 'doLogin')
 data.setCell(2, 2, 'com.saucelab.test.TestClass1')
-data.setCell(2, 3, 6484);
+data.setCell(2, 3, 6563);
 data.setCell(3, 0, 3)
 data.setCell(3, 1, 'doLogin')
 data.setCell(3, 2, 'com.saucelab.test.TestClass1')
-data.setCell(3, 3, 5948);
+data.setCell(3, 3, 5837);
 data.setCell(4, 0, 4)
 data.setCell(4, 1, 'doLogin')
 data.setCell(4, 2, 'com.saucelab.test.TestClass1')
-data.setCell(4, 3, 4487);
+data.setCell(4, 3, 4588);
 data.setCell(5, 0, 5)
 data.setCell(5, 1, 'doLogin')
 data.setCell(5, 2, 'com.saucelab.test.TestClass1')
-data.setCell(5, 3, 3401);
+data.setCell(5, 3, 4231);
+data.setCell(6, 0, 6)
+data.setCell(6, 1, 'testFail')
+data.setCell(6, 2, 'com.saucelab.test.FailedTestClass')
+data.setCell(6, 3, 2477);
 window.suiteTableData['Suite']= { tableData: data, tableDiv: 'times-div-Suite'}
 return data;
 }
               </script>
-              <span class="suite-total-time">Total running time: 34 seconds</span>
+              <span class="suite-total-time">Total running time: 19 seconds</span>
               <div id="times-div-Suite">
               </div> <!-- times-div-Suite -->
             </div> <!-- times-div -->
@@ -323,9 +366,18 @@ return data;
         </div> <!-- panel -->
         <div panel-name="ignored-methods-Suite" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">0 ignored methods</span>
+            <span class="header-content">2 ignored methods</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
+            <div class="ignored-class-div">
+              <span class="ignored-class-name">com.saucelab.test.FailedTestClass</span>
+              <div class="ignored-methods-div">
+                <span class="ignored-method-name">flushExtentReport</span>
+                <br/>
+                <span class="ignored-method-name">initializeExtentReport</span>
+                <br/>
+              </div> <!-- ignored-methods-div -->
+            </div> <!-- ignored-class-div -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
         <div panel-name="chronological-Suite" class="panel">
@@ -341,103 +393,157 @@ return data;
               </div> <!-- configuration-suite before -->
               <div class="configuration-method before">
                 <span class="method-name">setupLogger</span>
-                <span class="method-start">200 ms</span>
+                <span class="method-start">252 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setupLogger</span>
+                <span class="method-start">252 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setupLogger</span>
+                <span class="method-start">253 ms</span>
               </div> <!-- configuration-method before -->
               <div class="configuration-method before">
                 <span class="method-name">setUpEnv(chrome, windows, https://www.saucedemo.com/)</span>
-                <span class="method-start">536 ms</span>
+                <span class="method-start">463 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setUpEnv(firefox, windows, https://www.saucedemo.com/)</span>
+                <span class="method-start">463 ms</span>
               </div> <!-- configuration-method before -->
               <div class="test-method">
                 <span class="method-name">doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=stand...)</span>
-                <span class="method-start">538 ms</span>
+                <span class="method-start">464 ms</span>
+              </div> <!-- test-method -->
+              <div class="test-method">
+                <span class="method-name">doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=stand...)</span>
+                <span class="method-start">464 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method before">
+                <span class="method-name">setUpEnv(edge, windows, https://www.saucedemo.com/)</span>
+                <span class="method-start">786 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=stand...)</span>
+                <span class="method-start">789 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
-                <span class="method-name">removeLogger</span>
-                <span class="method-start">7029 ms</span>
+                <span class="method-name">quitBrowser</span>
+                <span class="method-start">6310 ms</span>
               </div> <!-- configuration-method after -->
+              <div class="configuration-method after">
+                <span class="method-name">removeLogger</span>
+                <span class="method-start">6877 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setupLogger</span>
+                <span class="method-start">6882 ms</span>
+              </div> <!-- configuration-method before -->
               <div class="configuration-method before">
                 <span class="method-name">setUpEnv(chrome, windows, https://www.saucedemo.com/)</span>
-                <span class="method-start">7032 ms</span>
-              </div> <!-- configuration-method before -->
-              <div class="configuration-method before">
-                <span class="method-name">setupLogger</span>
-                <span class="method-start">7032 ms</span>
+                <span class="method-start">6882 ms</span>
               </div> <!-- configuration-method before -->
               <div class="test-method">
                 <span class="method-name">doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=visua...)</span>
-                <span class="method-start">7032 ms</span>
+                <span class="method-start">6885 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
-                <span class="method-name">removeLogger</span>
-                <span class="method-start">10433 ms</span>
+                <span class="method-name">quitBrowser</span>
+                <span class="method-start">7807 ms</span>
               </div> <!-- configuration-method after -->
-              <div class="test-method">
-                <span class="method-name">doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=stand...)</span>
-                <span class="method-start">10476 ms</span>
-              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">removeLogger</span>
+                <span class="method-start">9271 ms</span>
+              </div> <!-- configuration-method after -->
               <div class="configuration-method before">
                 <span class="method-name">setupLogger</span>
-                <span class="method-start">10476 ms</span>
+                <span class="method-start">9272 ms</span>
               </div> <!-- configuration-method before -->
               <div class="configuration-method before">
                 <span class="method-name">setUpEnv(edge, windows, https://www.saucedemo.com/)</span>
-                <span class="method-start">10476 ms</span>
-              </div> <!-- configuration-method before -->
-              <div class="configuration-method after">
-                <span class="method-name">removeLogger</span>
-                <span class="method-start">16438 ms</span>
-              </div> <!-- configuration-method after -->
-              <div class="configuration-method before">
-                <span class="method-name">setupLogger</span>
-                <span class="method-start">16440 ms</span>
-              </div> <!-- configuration-method before -->
-              <div class="configuration-method before">
-                <span class="method-name">setUpEnv(edge, windows, https://www.saucedemo.com/)</span>
-                <span class="method-start">16441 ms</span>
+                <span class="method-start">9273 ms</span>
               </div> <!-- configuration-method before -->
               <div class="test-method">
                 <span class="method-name">doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=visua...)</span>
-                <span class="method-start">16441 ms</span>
+                <span class="method-start">9274 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
-                <span class="method-name">removeLogger</span>
-                <span class="method-start">20928 ms</span>
+                <span class="method-name">quitBrowser</span>
+                <span class="method-start">10219 ms</span>
               </div> <!-- configuration-method after -->
-              <div class="configuration-method before">
-                <span class="method-name">setUpEnv(firefox, windows, https://www.saucedemo.com/)</span>
-                <span class="method-start">20952 ms</span>
-              </div> <!-- configuration-method before -->
+              <div class="configuration-method after">
+                <span class="method-name">quitBrowser</span>
+                <span class="method-start">11478 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method after">
+                <span class="method-name">removeLogger</span>
+                <span class="method-start">11867 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">com.saucelab.test.FailedTestClass</div> <!-- chronological-class-name -->
               <div class="test-method">
-                <span class="method-name">doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=stand...)</span>
-                <span class="method-start">20952 ms</span>
+                <img src="failed.png">
+                </img>
+                <span class="method-name">testFail</span>
+                <span class="method-start">11869 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method before">
                 <span class="method-name">setupLogger</span>
-                <span class="method-start">20952 ms</span>
+                <span class="method-start">11869 ms</span>
+              </div> <!-- configuration-method before -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">com.saucelab.test.TestClass1</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setupLogger</span>
+                <span class="method-start">12045 ms</span>
               </div> <!-- configuration-method before -->
               <div class="configuration-method after">
                 <span class="method-name">removeLogger</span>
-                <span class="method-start">28287 ms</span>
+                <span class="method-start">12045 ms</span>
               </div> <!-- configuration-method after -->
               <div class="configuration-method before">
-                <span class="method-name">setupLogger</span>
-                <span class="method-start">28288 ms</span>
-              </div> <!-- configuration-method before -->
-              <div class="configuration-method before">
                 <span class="method-name">setUpEnv(firefox, windows, https://www.saucedemo.com/)</span>
-                <span class="method-start">28288 ms</span>
+                <span class="method-start">12048 ms</span>
               </div> <!-- configuration-method before -->
               <div class="test-method">
                 <span class="method-name">doLogin({runmode=y, password=secret_sauce, test_name=To verify Login feature is working fine, username=visua...)</span>
-                <span class="method-start">28288 ms</span>
+                <span class="method-start">12048 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
+                <span class="method-name">quitBrowser</span>
+                <span class="method-start">13507 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">com.saucelab.test.FailedTestClass</div> <!-- chronological-class-name -->
+              <div class="configuration-method after">
+                <span class="method-name">quitBrowser</span>
+                <span class="method-start">14489 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method after">
                 <span class="method-name">removeLogger</span>
-                <span class="method-start">34948 ms</span>
+                <span class="method-start">14811 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">com.saucelab.test.TestClass1</div> <!-- chronological-class-name -->
+              <div class="configuration-method after">
+                <span class="method-name">removeLogger</span>
+                <span class="method-start">15088 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method after">
+                <span class="method-name">quitBrowser</span>
+                <span class="method-start">18612 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method after">
+                <span class="method-name">removeLogger</span>
+                <span class="method-start">19516 ms</span>
               </div> <!-- configuration-method after -->
               <div class="configuration-suite after">
                 <span class="method-name">flushExtentReport</span>
-                <span class="method-start">34952 ms</span>
+                <span class="method-start">19521 ms</span>
               </div> <!-- configuration-suite after -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
