@@ -7,7 +7,9 @@ pipeline {
     }
 
     environment {
+        REPORT_DIR = "target\\reports"
         REPORT_HTML = "target\\reports\\extent-report.html"
+        GENERATED_REPORT_PATH = "some\\custom\\output\\location\\extent-report.html" // change if needed
         SCREENSHOT_BASE_DIR = "target\\screenshots"
         LOG_DIR = "logs"
         REPORT_NAME = "Test Execution Report"
@@ -25,6 +27,20 @@ pipeline {
         stage('Run Tests') {
             steps {
                 bat "mvn clean test -Dheadless=true"
+            }
+        }
+
+        stage('Ensure HTML Report in Workspace') {
+            steps {
+                script {
+                    // Create reports directory if it doesn't exist
+                    bat """if not exist "${env.REPORT_DIR}" mkdir "${env.REPORT_DIR}" """
+
+                    // If report is generated elsewhere, copy it to target/reports
+                    if (env.GENERATED_REPORT_PATH != env.REPORT_HTML) {
+                        bat """if exist "${env.GENERATED_REPORT_PATH}" copy "${env.GENERATED_REPORT_PATH}" "${env.REPORT_HTML}" /Y"""
+                    }
+                }
             }
         }
 
@@ -82,6 +98,18 @@ pipeline {
                 ])
             }
         }
+
+        stage('Verify Report Exists') {
+            steps {
+                script {
+                    if (fileExists(env.REPORT_HTML)) {
+                        echo "✅ Report found: ${env.REPORT_HTML}"
+                    } else {
+                        echo "❌ Report not found! Email will exclude it."
+                    }
+                }
+            }
+        }
     }
 
     post {
@@ -92,7 +120,7 @@ pipeline {
                     body: """
                         <p>Hi Team,</p>
                         <p>The automated test execution completed successfully.</p>
-                        <p>Extent report is attached as HTML along with logs and screenshots (if available).</p>
+                        <p>The extent report is attached along with logs and screenshots.</p>
                         <p>Regards,<br/>Automation Framework</p>
                     """,
                     mimeType: 'text/html',
@@ -108,8 +136,7 @@ pipeline {
                     subject: "Test Report - Build #${env.BUILD_NUMBER} FAILED",
                     body: """
                         <p>Hi Team,</p>
-                        <p>The build has failed. Please check the attached report and logs.</p>
-                        <p>Extent report is attached as HTML along with logs and screenshots (if available).</p>
+                        <p>The build failed. Please check the attached extent report, logs, and screenshots.</p>
                         <p>Regards,<br/>Automation Framework</p>
                     """,
                     mimeType: 'text/html',
@@ -125,7 +152,7 @@ pipeline {
     }
 }
 
-// ✅ Helper method to attach only existing files
+// ✅ Helper method to include only available attachments
 def buildAttachments() {
     def files = []
     if (fileExists(env.REPORT_HTML)) files << env.REPORT_HTML
