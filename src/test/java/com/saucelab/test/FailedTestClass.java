@@ -18,7 +18,7 @@ public class FailedTestClass extends BaseTest {
 		System.out.println("About to fail");
 		if(DriverManager.getDriver()!=null)
 			System.out.println("Not null");
-		Assert.assertTrue(true);
+		Assert.assertFalse(true,"Deliberate fail");
 	}
 
 }

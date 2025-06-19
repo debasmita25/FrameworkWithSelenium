@@ -128,11 +128,12 @@ pipeline {
         success {
             script {
                 emailext(
-                    subject: "✅ Test Report - Build #${env.BUILD_NUMBER} SUCCESS",
+                    subject: "Test Report - Build #${env.BUILD_NUMBER} SUCCESS",
                     body: """
                         <p>Hi Team,</p>
                         <p>The automated test execution completed successfully.</p>
                         <p>Attached: latest HTML report, screenshots, and logs (if available).</p>
+						<p>Download the HTML report first and then open it.</p>
                         <p>Regards,<br/>Automation Framework</p>
                     """,
                     mimeType: 'text/html',
@@ -145,10 +146,11 @@ pipeline {
         failure {
             script {
                 emailext(
-                    subject: "❌ Test Report - Build #${env.BUILD_NUMBER} FAILED",
+                    subject: "Test Report - Build #${env.BUILD_NUMBER} FAILED",
                     body: """
                         <p>Hi Team,</p>
                         <p>The build has failed. Please review the attached report, screenshots, and logs.</p>
+						<p>Download the HTML report first and then open it.</p>
                         <p>Regards,<br/>Automation Framework</p>
                     """,
                     mimeType: 'text/html',
