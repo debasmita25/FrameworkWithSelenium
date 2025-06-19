@@ -90,7 +90,7 @@ pipeline {
 
                 // --- SEND EMAIL ---
                 emailext(
-                    subject: "🧪 Test Report - Build #${env.BUILD_NUMBER} [${currentBuild.currentResult}]",
+                    subject: "Test Report - Build #${env.BUILD_NUMBER} [${currentBuild.currentResult}]",
                     body: """
                         <p>Hi Team,</p>
                         <p>The automated test execution has completed with status: <b>${currentBuild.currentResult}</b></p>
