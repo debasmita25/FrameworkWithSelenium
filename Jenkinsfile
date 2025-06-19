@@ -36,7 +36,7 @@ pipeline {
                     def screenshotZip = "screenshots.zip"
                     def logsZip = "logs.zip"
 
-                    // Check screenshots
+                    // Zip latest screenshot folder if exists
                     def latestScreenshotFolder = powershell(returnStdout: true, script: """
                         if (Test-Path '${env.SCREENSHOT_BASE_DIR}') {
                             Get-ChildItem -Directory '${env.SCREENSHOT_BASE_DIR}' |
@@ -49,7 +49,6 @@ pipeline {
                     if (latestScreenshotFolder) {
                         echo "📸 Latest Screenshot Folder: ${latestScreenshotFolder}"
                         def screenshotFullPath = "${env.SCREENSHOT_BASE_DIR}\\${latestScreenshotFolder}"
-
                         bat """powershell -Command "if (Test-Path '${screenshotFullPath}') {
                             Compress-Archive -Path '${screenshotFullPath}\\*' -DestinationPath '${screenshotZip}' -Force
                         }" """
@@ -58,7 +57,7 @@ pipeline {
                         echo "⚠️ No screenshots folder found. Skipping zip."
                     }
 
-                    // Zip logs
+                    // Zip logs if available
                     def logCheck = powershell(returnStatus: true, script: "Test-Path '${env.LOG_DIR}'")
                     if (logCheck == 0) {
                         bat """powershell -Command "Compress-Archive -Path '${env.LOG_DIR}\\*' -DestinationPath '${logsZip}' -Force" """
@@ -77,7 +76,7 @@ pipeline {
                     reportFiles: 'extent-report.html',
                     reportName: "${env.REPORT_NAME}",
                     reportTitles: 'Test Results',
-                    allowMissing: true,   // prevent failure if report is missing
+                    allowMissing: true,   // continue even if report is missing
                     alwaysLinkToLastBuild: true,
                     keepAll: true
                 ])
@@ -96,6 +95,7 @@ pipeline {
                         <ul>
                           <li><a href="${env.BUILD_URL}HTML_20Report/">View Extent Report</a></li>
                         </ul>
+                        <p>Extent report is also attached as HTML.</p>
                         <p>Regards,<br/>Automation Framework</p>
                     """,
                     mimeType: 'text/html',
@@ -111,11 +111,12 @@ pipeline {
                     subject: "❌ Test Report - Build #${env.BUILD_NUMBER} FAILED",
                     body: """
                         <p>Hi Team,</p>
-                        <p>The build has <b>failed</b>. Please review the logs and reports.</p>
+                        <p><b>Build failed.</b> Please review the logs and reports below:</p>
                         <ul>
                           <li><a href="${env.BUILD_URL}console">Console Output</a></li>
                           <li><a href="${env.BUILD_URL}HTML_20Report/">Extent Report (if available)</a></li>
                         </ul>
+                        <p>Extent report is also attached as HTML (if generated).</p>
                         <p>Regards,<br/>Automation Framework</p>
                     """,
                     mimeType: 'text/html',
@@ -131,11 +132,11 @@ pipeline {
     }
 }
 
-// 🧠 Helper method (only attach available files)
+// 🧠 Helper method to attach only existing files
 def buildAttachments() {
     def files = []
-    if (env.REPORT_HTML?.trim()) files << env.REPORT_HTML
-    if (env.SCREENSHOT_ZIP?.trim()) files << env.SCREENSHOT_ZIP
-    if (env.LOG_ZIP?.trim()) files << env.LOG_ZIP
+    if (fileExists(env.REPORT_HTML)) files << env.REPORT_HTML
+    if (env.SCREENSHOT_ZIP?.trim() && fileExists(env.SCREENSHOT_ZIP)) files << env.SCREENSHOT_ZIP
+    if (env.LOG_ZIP?.trim() && fileExists(env.LOG_ZIP)) files << env.LOG_ZIP
     return files.join(',')
 }
