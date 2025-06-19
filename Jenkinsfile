@@ -76,7 +76,7 @@ pipeline {
                     reportFiles: 'extent-report.html',
                     reportName: "${env.REPORT_NAME}",
                     reportTitles: 'Test Results',
-                    allowMissing: true,   // continue even if report is missing
+                    allowMissing: true,
                     alwaysLinkToLastBuild: true,
                     keepAll: true
                 ])
@@ -88,14 +88,11 @@ pipeline {
         success {
             script {
                 emailext(
-                    subject: "✅ Test Report - Build #${env.BUILD_NUMBER} SUCCESS",
+                    subject: "Test Report - Build #${env.BUILD_NUMBER} SUCCESS",
                     body: """
                         <p>Hi Team,</p>
-                        <p>The automated test execution completed <b>successfully</b>.</p>
-                        <ul>
-                          <li><a href="${env.BUILD_URL}HTML_20Report/">View Extent Report</a></li>
-                        </ul>
-                        <p>Extent report is also attached as HTML.</p>
+                        <p>The automated test execution completed successfully.</p>
+                        <p>Extent report is attached as HTML along with logs and screenshots (if available).</p>
                         <p>Regards,<br/>Automation Framework</p>
                     """,
                     mimeType: 'text/html',
@@ -108,15 +105,11 @@ pipeline {
         failure {
             script {
                 emailext(
-                    subject: "❌ Test Report - Build #${env.BUILD_NUMBER} FAILED",
+                    subject: "Test Report - Build #${env.BUILD_NUMBER} FAILED",
                     body: """
                         <p>Hi Team,</p>
-                        <p><b>Build failed.</b> Please review the logs and reports below:</p>
-                        <ul>
-                          <li><a href="${env.BUILD_URL}console">Console Output</a></li>
-                          <li><a href="${env.BUILD_URL}HTML_20Report/">Extent Report (if available)</a></li>
-                        </ul>
-                        <p>Extent report is also attached as HTML (if generated).</p>
+                        <p>The build has failed. Please check the attached report and logs.</p>
+                        <p>Extent report is attached as HTML along with logs and screenshots (if available).</p>
                         <p>Regards,<br/>Automation Framework</p>
                     """,
                     mimeType: 'text/html',
@@ -132,7 +125,7 @@ pipeline {
     }
 }
 
-// 🧠 Helper method to attach only existing files
+// ✅ Helper method to attach only existing files
 def buildAttachments() {
     def files = []
     if (fileExists(env.REPORT_HTML)) files << env.REPORT_HTML
