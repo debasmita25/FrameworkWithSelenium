@@ -110,7 +110,7 @@ public class BaseTest {
 			System.out.println("Launching : " + browser);
 			// Create Edge Options
 			EdgeOptions options = new EdgeOptions();
-			options.addArguments("--headless=new"); // Use --headless=new for Chromium-based headless
+			options.addArguments("--headless"); // Use --headless=new for Chromium-based headless
 			options.addArguments("--disable-gpu");
 			options.addArguments("--window-size=1920,1080");
 			// Disable password manager and warnings
