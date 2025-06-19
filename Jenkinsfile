@@ -44,21 +44,21 @@ pipeline {
                 """).trim()
 
                 if (reportHtml && fileExists(reportHtml)) {
-                    // Convert Windows-style path
                     reportHtml = reportHtml.replace("\\", "/").replace("${workspace}/", "")
+                    attachments << reportHtml
 
-                    // ✅ Read file and extract test summary using regex
-                    def rawHtml = readFile(reportHtml).trim()
+                    // ✅ Read and parse summary from HTML
+                    def rawHtml = readFile(reportHtml).replaceAll(/[\r\n]+/, " ")
 
-                    def passedMatch = rawHtml =~ /Tests Passed\s*(\d+)/
-                    def failedMatch = rawHtml =~ /Tests Failed\s*(\d+)/
+                    def passedMatch = rawHtml =~ /Tests\s*Passed\s*(\d+)/
+                    def failedMatch = rawHtml =~ /Tests\s*Failed\s*(\d+)/
 
-                    if (passedMatch.find() || failedMatch.find()) {
-                        def passed = passedMatch.find() ? passedMatch[0][1].toInteger() : 0
-                        def failed = failedMatch.find() ? failedMatch[0][1].toInteger() : 0
-                        def total = passed + failed
-                        def skipped = 0  // Extent doesn't list it here
+                    def passed = passedMatch.find() ? passedMatch[0][1] as int : 0
+                    def failed = failedMatch.find() ? failedMatch[0][1] as int : 0
+                    def total = passed + failed
+                    def skipped = 0
 
+                    if (total > 0) {
                         testSummary = """
                             <ul>
                                 <li>✅ Total: ${total}</li>
@@ -67,17 +67,16 @@ pipeline {
                                 <li>🟡 Skipped: ${skipped}</li>
                             </ul>
                         """
-                        attachments << reportHtml
                     } else {
-                        echo "⚠️ Could not extract summary from HTML"
-                        testSummary = "<p>⚠️ Could not extract summary from Extent Report.</p>"
+                        testSummary = "<p>⚠️ Could not extract valid test summary from Extent Report.</p>"
                     }
+
                 } else {
                     echo "❌ HTML report not found"
                     testSummary = "<p>❌ No HTML report found.</p>"
                 }
 
-                // ✅ Zip screenshots
+                // ✅ Zip screenshots (latest timestamped folder)
                 def latestScreenshotFolder = powershell(returnStdout: true, script: """
                     if (Test-Path '${env.SCREENSHOT_BASE_DIR}') {
                         Get-ChildItem -Directory '${env.SCREENSHOT_BASE_DIR}' |
@@ -105,10 +104,10 @@ pipeline {
                     }
                 }
 
+                // ✅ Compose and send email
                 def attachmentPattern = attachments.join(',')
                 echo "📎 Attachments to be sent: ${attachmentPattern}"
 
-                // ✅ Send email
                 emailext(
                     subject: "🧪 Test Report - Build #${env.BUILD_NUMBER} [${currentBuild.currentResult}]",
                     body: """

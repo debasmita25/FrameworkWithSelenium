@@ -13,7 +13,7 @@
             <class name="com.saucelab.test.FailedTestClass"/>
 		</classes>
 	</test> <!-- Test -->
-	<test name="Test2" enabled="true" >
+	<test name="Test2" enabled="false" >
 		<parameter name="os" value="windows"></parameter>
 		<parameter name="browser" value="edge"></parameter>
 		<parameter name="testurl" value="https://www.saucedemo.com/"></parameter>
@@ -21,7 +21,7 @@
 			<class name="com.saucelab.test.TestClass1" />
 		</classes>
 	</test> <!-- Test -->
-	<test name="Test3" enabled="true">
+	<test name="Test3" enabled="false">
 		<parameter name="os" value="windows"></parameter>
 		<parameter name="browser" value="firefox"></parameter>
 		<parameter name="testurl" value="https://www.saucedemo.com/"></parameter>

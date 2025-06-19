@@ -33,26 +33,31 @@ pipeline {
                 def attachments = []
                 def testSummary = ""
                 def workspace = pwd().replace("\\", "/")
+                def reportHtml = ""
 
-                // ✅ Find Extent HTML Report
-                def reportHtml = powershell(returnStdout: true, script: """
+                // ✅ Find latest extent-report.html
+                reportHtml = powershell(returnStdout: true, script: """
                     Get-ChildItem -Path '${env.REPORT_DIR}' -Filter *.html |
                     Sort-Object LastWriteTime -Descending |
                     Select-Object -First 1 |
                     Select-Object -ExpandProperty FullName
                 """).trim()
 
-                // ✅ Parse test summary from Extent HTML
                 if (reportHtml && fileExists(reportHtml)) {
+                    // Convert Windows-style path
+                    reportHtml = reportHtml.replace("\\", "/").replace("${workspace}/", "")
+
+                    // ✅ Read file and extract test summary using regex
                     def rawHtml = readFile(reportHtml).trim()
 
-                    def matcher = rawHtml =~ /Tests\s+passed:\s*(\d+),\s*failed:\s*(\d+),\s*skipped:\s*(\d+)/
+                    def passedMatch = rawHtml =~ /Tests Passed\s*(\d+)/
+                    def failedMatch = rawHtml =~ /Tests Failed\s*(\d+)/
 
-                    if (matcher.find()) {
-                        def passed = matcher[0][1]
-                        def failed = matcher[0][2]
-                        def skipped = matcher[0][3]
-                        def total = (passed.toInteger() + failed.toInteger() + skipped.toInteger())
+                    if (passedMatch.find() || failedMatch.find()) {
+                        def passed = passedMatch.find() ? passedMatch[0][1].toInteger() : 0
+                        def failed = failedMatch.find() ? failedMatch[0][1].toInteger() : 0
+                        def total = passed + failed
+                        def skipped = 0  // Extent doesn't list it here
 
                         testSummary = """
                             <ul>
@@ -62,20 +67,17 @@ pipeline {
                                 <li>🟡 Skipped: ${skipped}</li>
                             </ul>
                         """
-
-                        reportHtml = reportHtml.replace("\\", "/").replace("${workspace}/", "")
                         attachments << reportHtml
                     } else {
-                        echo "⚠️ Could not extract test summary from HTML"
+                        echo "⚠️ Could not extract summary from HTML"
                         testSummary = "<p>⚠️ Could not extract summary from Extent Report.</p>"
                     }
                 } else {
-                    echo "⚠️ HTML report not found"
-                    testSummary = "<p>⚠️ No HTML report found. Summary unavailable.</p>"
-                    reportHtml = ""
+                    echo "❌ HTML report not found"
+                    testSummary = "<p>❌ No HTML report found.</p>"
                 }
 
-                // ✅ Zip latest screenshot folder
+                // ✅ Zip screenshots
                 def latestScreenshotFolder = powershell(returnStdout: true, script: """
                     if (Test-Path '${env.SCREENSHOT_BASE_DIR}') {
                         Get-ChildItem -Directory '${env.SCREENSHOT_BASE_DIR}' |
@@ -104,18 +106,18 @@ pipeline {
                 }
 
                 def attachmentPattern = attachments.join(',')
-                echo "📎 Attachments: ${attachmentPattern}"
+                echo "📎 Attachments to be sent: ${attachmentPattern}"
 
-                // ✅ Send email with summary + attachments
+                // ✅ Send email
                 emailext(
                     subject: "🧪 Test Report - Build #${env.BUILD_NUMBER} [${currentBuild.currentResult}]",
                     body: """
                         <p>Hi Team,</p>
-                        <p>Test execution completed with status: <b>${currentBuild.currentResult}</b></p>
+                        <p>The automated test execution has completed with status: <strong>${currentBuild.currentResult}</strong></p>
                         <h4>📊 Test Summary:</h4>
                         ${testSummary}
-                        <p>📎 Attached: HTML report, screenshots, and logs (if available)</p>
-                        <p><strong>Note:</strong> Download and open the HTML report in a browser.</p>
+                        <p>📎 Attached: HTML report, screenshots, and logs (if available).</p>
+                        <p><strong>Note:</strong> Download the HTML report and open it in a browser.</p>
                         <p>Regards,<br/>Automation Framework</p>
                     """,
                     mimeType: 'text/html',
