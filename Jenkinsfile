@@ -7,10 +7,10 @@ pipeline {
     }
 
     environment {
-        REPORT_PATH = 'target/reports/extent-report.html'
-        SCREENSHOT_DIR = 'target/screenshots'
-        LOG_DIR = 'logs'
-        EMAIL_TO = 'debasmita25@gmail.com'
+        SCREENSHOT_BASE_DIR = "target/screenshots"
+        REPORT_PATH = "target/reports/extent-report.html"
+        LOG_DIR = "logs"
+        EMAIL_TO = "debasmita25@gmail.com"
     }
 
     stages {
@@ -22,61 +22,50 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                bat 'mvn clean test -Dheadless=true'
+                bat "mvn clean test -Dheadless=true"
             }
         }
 
         stage('Prepare Artifacts') {
             steps {
                 script {
-                    def timestamp = new Date().format("dd-MM-yyyy_HH_mm_ss")
-
-                    // Zip latest screenshots folder
-                    def screenshotFolders = new File(SCREENSHOT_DIR).listFiles().findAll { it.directory }
-                    screenshotFolders.sort { -it.lastModified() }
-                    def latestScreenshot = screenshotFolders ? screenshotFolders[0] : null
-                    if (latestScreenshot) {
-                        def screenshotZip = "screenshots_${timestamp}.zip"
-                        bat "powershell -Command \"Compress-Archive -Path '${latestScreenshot}/' -DestinationPath '${screenshotZip}' -Force\""
-                        env.SCREENSHOT_ZIP = screenshotZip
+                    // Screenshot zip
+                    def latestFolder = powershell(returnStdout: true, script: """
+                        if (Test-Path '${env.SCREENSHOT_BASE_DIR}') {
+                            Get-ChildItem '${env.SCREENSHOT_BASE_DIR}' -Directory |
+                            Sort-Object LastWriteTime -Descending |
+                            Select-Object -First 1 |
+                            Select-Object -ExpandProperty Name
+                        }
+                    """).trim()
+                    if (latestFolder) {
+                        def src = "${env.SCREENSHOT_BASE_DIR}/${latestFolder}"
+                        def zip = "screenshots.zip"
+                        bat "powershell Compress-Archive -Path '${src}/*' -DestinationPath '${zip}' -Force"
+                        env.SCREENSHOT_ZIP = zip
+                        echo "📸 Zipped screenshots from: ${src}"
                     } else {
-                        echo 'No screenshots found.'
-                        env.SCREENSHOT_ZIP = ''
+                        echo "⚠️ No screenshot folders found."
                     }
 
-                    // Zip logs
-                    def logZip = "logs_${timestamp}.zip"
-                    if (fileExists(LOG_DIR)) {
-                        bat "powershell -Command \"Compress-Archive -Path '${LOG_DIR}/*' -DestinationPath '${logZip}' -Force\""
-                        env.LOG_ZIP = logZip
+                    // Logs zip
+                    if (fileExists(env.LOG_DIR)) {
+                        def zip = "logs.zip"
+                        bat "powershell Compress-Archive -Path '${env.LOG_DIR}/*' -DestinationPath '${zip}' -Force"
+                        env.LOG_ZIP = zip
+                        echo "📝 Zipped logs from: ${env.LOG_DIR}"
                     } else {
-                        echo 'No logs found.'
-                        env.LOG_ZIP = ''
-                    }
-
-                    // Confirm report
-                    if (!fileExists(REPORT_PATH)) {
-                        echo '❌ HTML report not found.'
-                        env.REPORT_PATH = ''
+                        echo "⚠️ No logs found to zip."
                     }
                 }
             }
         }
 
-        stage('Publish Report') {
+        stage('Summarize Test Results') {
             steps {
                 script {
-                    if (fileExists(REPORT_PATH)) {
-                        publishHTML(target: [
-                            reportDir: 'target/reports',
-                            reportFiles: 'extent-report.html',
-                            reportName: 'Test Report',
-                            alwaysLinkToLastBuild: true,
-                            keepAll: true
-                        ])
-                    } else {
-                        echo '⚠️ No report to publish.'
-                    }
+                    env.TEST_SUMMARY = extractSummary(env.REPORT_PATH)
+                    echo "📊 Test Summary: ${env.TEST_SUMMARY}"
                 }
             }
         }
@@ -85,47 +74,59 @@ pipeline {
     post {
         always {
             script {
-                // Build test summary from report HTML
-                def summary = '⚠️ Could not extract valid test summary from Extent Report.'
-                if (fileExists(REPORT_PATH)) {
-                    def content = readFile(REPORT_PATH)
-                    def passed = content =~ /<p class=\"m-b-0 text-pass\">Tests Passed<\/p>\s*<h3>(\\d+)<\/h3>/
-                    def failed = content =~ /<p class=\"m-b-0 text-fail\">Tests Failed<\/p>\s*<h3>(\\d+)<\/h3>/
-                    if (passed.find() && failed.find()) {
-                        summary = """
-✅ Test Summary:<br/>
-Passed: ${passed[0][1]}<br/>
-Failed: ${failed[0][1]}<br/>
-                        """
-                    }
-                }
-
-                // Attachments
                 def attachments = []
-                if (fileExists(REPORT_PATH)) attachments << REPORT_PATH
-                if (env.SCREENSHOT_ZIP?.trim() && fileExists(env.SCREENSHOT_ZIP)) attachments << env.SCREENSHOT_ZIP
-                if (env.LOG_ZIP?.trim() && fileExists(env.LOG_ZIP)) attachments << env.LOG_ZIP
 
-                def attachmentPattern = attachments.join(',')
-                echo "📎 Email attachments: ${attachmentPattern}"
+                def reportExists = fileExists(REPORT_PATH)
+                if (reportExists) attachments << REPORT_PATH
+                if (env.SCREENSHOT_ZIP && fileExists(env.SCREENSHOT_ZIP)) attachments << env.SCREENSHOT_ZIP
+                if (env.LOG_ZIP && fileExists(env.LOG_ZIP)) attachments << env.LOG_ZIP
 
-                // Email notification
                 def status = currentBuild.currentResult
+                def color = status == 'SUCCESS' ? '#28a745' : '#dc3545'
+                def subject = "🧪 Test Report - Build #${env.BUILD_NUMBER} [${status}]"
+
                 emailext(
-                    subject: "🧪 Test Report - Build #${env.BUILD_NUMBER} [${status}]",
+                    subject: subject,
                     body: """
-<p>Hi Team,</p>
-<p>The automated test execution has completed with status: <b>${status}</b></p>
-<p>${summary}</p>
-<p>📎 Attached: HTML report, screenshots, and logs (if available).</p>
-<p>Note: Download the HTML report and open it in a browser.</p>
-<p>Regards,<br/>Automation Framework</p>
+                        <p>Hi Team,</p>
+                        <p>The automated test execution has completed with status: <b style='color:${color}'>${status}</b></p>
+
+                        <p>📊 <b>Test Summary:</b><br/>
+                        ${env.TEST_SUMMARY.replaceAll('\n', '<br/>')}
+                        </p>
+
+                        <p>📎 Attached: HTML report, screenshots, and logs (if available).</p>
+                        <p><i>Note: Download the HTML report and open it in a browser.</i></p>
+
+                        <p>Regards,<br/>Automation Framework</p>
                     """,
                     mimeType: 'text/html',
-                    to: EMAIL_TO,
-                    attachmentsPattern: attachmentPattern
+                    to: "${env.EMAIL_TO}",
+                    attachmentsPattern: attachments.join(',')
                 )
             }
         }
+    }
+}
+
+// ✅ Helper function to extract summary from extent-report.html
+def extractSummary(reportPath) {
+    if (!fileExists(reportPath)) return "⚠️ HTML report not found."
+
+    try {
+        def content = readFile(reportPath)
+
+        def passMatch = content =~ /<p class="m-b-0 text-pass">.*?<\/p>\s*<h3>(\d+)<\/h3>/
+        def failMatch = content =~ /<p class="m-b-0 text-fail">.*?<\/p>\s*<h3>(\d+)<\/h3>/
+
+        def passed = passMatch ? passMatch[0][1] : "0"
+        def failed = failMatch ? failMatch[0][1] : "0"
+
+        return """✅ Tests Passed: ${passed}
+❌ Tests Failed: ${failed}"""
+
+    } catch (e) {
+        echo "❌ Summary extract failed: ${e.message}"
+        return "⚠️ Could not extract valid test summary from Extent Report."
     }
 }
