@@ -10,7 +10,6 @@ pipeline {
         SCREENSHOT_BASE_DIR = "target/screenshots"
         LOG_DIR = "logs"
         REPORT_DIR = "target/reports"
-        RESULT_XML = "target/surefire-reports/testng-results.xml"
         EMAIL_TO = "debasmita25@gmail.com"
     }
 
@@ -35,31 +34,48 @@ pipeline {
                 def testSummary = ""
                 def workspace = pwd().replace("\\", "/")
 
-                // ✅ Extract test summary from testng-results.xml using findstr
-                if (fileExists(env.RESULT_XML)) {
-                    def testngLine = bat(
-                        script: "findstr /C:\"<testng-results\" ${env.RESULT_XML}",
-                        returnStdout: true
-                    ).trim()
+                // ✅ Find Extent HTML Report
+                def reportHtml = powershell(returnStdout: true, script: """
+                    Get-ChildItem -Path '${env.REPORT_DIR}' -Filter *.html |
+                    Sort-Object LastWriteTime -Descending |
+                    Select-Object -First 1 |
+                    Select-Object -ExpandProperty FullName
+                """).trim()
 
-                    def total = (testngLine =~ /total="(\d+)"/)[0][1]
-                    def passed = (testngLine =~ /passed="(\d+)"/)[0][1]
-                    def failed = (testngLine =~ /failed="(\d+)"/)[0][1]
-                    def skipped = (testngLine =~ /skipped="(\d+)"/)[0][1]
+                // ✅ Parse test summary from Extent HTML
+                if (reportHtml && fileExists(reportHtml)) {
+                    def rawHtml = readFile(reportHtml).trim()
 
-                    testSummary = """
-                        <ul>
-                            <li>✅ Total: ${total}</li>
-                            <li>🟢 Passed: ${passed}</li>
-                            <li>🔴 Failed: ${failed}</li>
-                            <li>🟡 Skipped: ${skipped}</li>
-                        </ul>
-                    """
+                    def matcher = rawHtml =~ /Tests\s+passed:\s*(\d+),\s*failed:\s*(\d+),\s*skipped:\s*(\d+)/
+
+                    if (matcher.find()) {
+                        def passed = matcher[0][1]
+                        def failed = matcher[0][2]
+                        def skipped = matcher[0][3]
+                        def total = (passed.toInteger() + failed.toInteger() + skipped.toInteger())
+
+                        testSummary = """
+                            <ul>
+                                <li>✅ Total: ${total}</li>
+                                <li>🟢 Passed: ${passed}</li>
+                                <li>🔴 Failed: ${failed}</li>
+                                <li>🟡 Skipped: ${skipped}</li>
+                            </ul>
+                        """
+
+                        reportHtml = reportHtml.replace("\\", "/").replace("${workspace}/", "")
+                        attachments << reportHtml
+                    } else {
+                        echo "⚠️ Could not extract test summary from HTML"
+                        testSummary = "<p>⚠️ Could not extract summary from Extent Report.</p>"
+                    }
                 } else {
-                    testSummary = "<p>⚠️ testng-results.xml not found. Summary unavailable.</p>"
+                    echo "⚠️ HTML report not found"
+                    testSummary = "<p>⚠️ No HTML report found. Summary unavailable.</p>"
+                    reportHtml = ""
                 }
 
-                // ✅ Zip latest screenshots folder
+                // ✅ Zip latest screenshot folder
                 def latestScreenshotFolder = powershell(returnStdout: true, script: """
                     if (Test-Path '${env.SCREENSHOT_BASE_DIR}') {
                         Get-ChildItem -Directory '${env.SCREENSHOT_BASE_DIR}' |
@@ -78,7 +94,7 @@ pipeline {
                     }
                 }
 
-                // ✅ Zip logs folder
+                // ✅ Zip logs
                 if (powershell(returnStatus: true, script: "Test-Path '${env.LOG_DIR}'") == 0) {
                     def logsZip = "logs.zip"
                     bat "powershell Compress-Archive -Path '${env.LOG_DIR}/*' -DestinationPath '${logsZip}' -Force"
@@ -87,34 +103,19 @@ pipeline {
                     }
                 }
 
-                // ✅ Find latest HTML report
-                def reportHtml = powershell(returnStdout: true, script: """
-                    Get-ChildItem -Path '${env.REPORT_DIR}' -Filter *.html |
-                    Sort-Object LastWriteTime -Descending |
-                    Select-Object -First 1 |
-                    Select-Object -ExpandProperty FullName
-                """).trim()
-
-                if (reportHtml) {
-                    reportHtml = reportHtml.replace("\\", "/").replace("${workspace}/", "")
-                    if (fileExists(reportHtml)) {
-                        attachments << reportHtml
-                    }
-                }
-
                 def attachmentPattern = attachments.join(',')
-                echo "📎 Email attachments: ${attachmentPattern}"
+                echo "📎 Attachments: ${attachmentPattern}"
 
-                // ✅ Send email
+                // ✅ Send email with summary + attachments
                 emailext(
                     subject: "🧪 Test Report - Build #${env.BUILD_NUMBER} [${currentBuild.currentResult}]",
                     body: """
                         <p>Hi Team,</p>
-                        <p>Automated test execution completed with status: <b>${currentBuild.currentResult}</b></p>
+                        <p>Test execution completed with status: <b>${currentBuild.currentResult}</b></p>
                         <h4>📊 Test Summary:</h4>
                         ${testSummary}
-                        <p>📎 Attached: HTML report, screenshots (if available), logs (if available)</p>
-                        <p>📌 Download and open the HTML report manually in a browser.</p>
+                        <p>📎 Attached: HTML report, screenshots, and logs (if available)</p>
+                        <p><strong>Note:</strong> Download and open the HTML report in a browser.</p>
                         <p>Regards,<br/>Automation Framework</p>
                     """,
                     mimeType: 'text/html',
