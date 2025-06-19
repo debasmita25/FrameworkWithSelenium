@@ -167,8 +167,20 @@ pipeline {
 // ✅ Helper to attach only existing files
 def buildAttachments() {
     def files = []
-    if (env.REPORT_HTML?.trim() && fileExists(env.REPORT_HTML)) files << env.REPORT_HTML
-    if (env.SCREENSHOT_ZIP?.trim() && fileExists(env.SCREENSHOT_ZIP)) files << env.SCREENSHOT_ZIP
-    if (env.LOG_ZIP?.trim() && fileExists(env.LOG_ZIP)) files << env.LOG_ZIP
+    def ws = pwd()
+
+    if (env.REPORT_HTML?.trim() && fileExists(env.REPORT_HTML)) {
+        def htmlRel = env.REPORT_HTML.replace(ws + "/", "")
+        files << htmlRel
+    }
+    if (env.SCREENSHOT_ZIP?.trim() && fileExists(env.SCREENSHOT_ZIP)) {
+        files << env.SCREENSHOT_ZIP
+    }
+    if (env.LOG_ZIP?.trim() && fileExists(env.LOG_ZIP)) {
+        files << env.LOG_ZIP
+    }
+
+    echo "📎 Will attach: ${files.join(', ')}"
     return files.join(',')
 }
+
