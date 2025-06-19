@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         maven 'Maven-3.9.10'   // Define in Global Tools with correct name
-        jdk 'JDK'       // Define Java version in Global Tools
+        jdk 'Java 17'       // Define Java version in Global Tools
     }
 
     environment {
