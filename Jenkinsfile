@@ -167,20 +167,29 @@ pipeline {
 // ✅ Helper to attach only existing files
 def buildAttachments() {
     def files = []
-    def ws = pwd()
+    def workspace = pwd().replace("\\", "/")  // Normalize slashes
 
-    if (env.REPORT_HTML?.trim() && fileExists(env.REPORT_HTML)) {
-        def htmlRel = env.REPORT_HTML.replace(ws + "/", "")
-        files << htmlRel
-    }
-    if (env.SCREENSHOT_ZIP?.trim() && fileExists(env.SCREENSHOT_ZIP)) {
-        files << env.SCREENSHOT_ZIP
-    }
-    if (env.LOG_ZIP?.trim() && fileExists(env.LOG_ZIP)) {
-        files << env.LOG_ZIP
+    if (env.REPORT_HTML?.trim()) {
+        def reportPath = env.REPORT_HTML.replace("\\", "/")
+        if (fileExists(reportPath)) {
+            def relativeReport = reportPath.replace(workspace + "/", "")
+            files << relativeReport
+        }
     }
 
-    echo "📎 Will attach: ${files.join(', ')}"
-    return files.join(',')
+    if (env.SCREENSHOT_ZIP?.trim()) {
+        if (fileExists(env.SCREENSHOT_ZIP)) {
+            files << env.SCREENSHOT_ZIP.replace("\\", "/")
+        }
+    }
+
+    if (env.LOG_ZIP?.trim()) {
+        if (fileExists(env.LOG_ZIP)) {
+            files << env.LOG_ZIP.replace("\\", "/")
+        }
+    }
+
+    def result = files.join(',')
+    echo "📎 AttachmentsPattern: ${result}"
+    return result
 }
-
