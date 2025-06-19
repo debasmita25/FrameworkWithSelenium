@@ -32,18 +32,20 @@ pipeline {
         always {
             script {
                 def attachments = []
-                def workspace = pwd().replace('\\', '/')
                 def testSummary = ""
+                def workspace = pwd().replace("\\", "/")
 
-                // ✅ Test Summary from testng-results.xml
+                // ✅ Extract test summary from testng-results.xml using findstr
                 if (fileExists(env.RESULT_XML)) {
-                    def xml = readFile(env.RESULT_XML)
-                    def parsed = new XmlSlurper().parseText(xml)
+                    def testngLine = bat(
+                        script: "findstr /C:\"<testng-results\" ${env.RESULT_XML}",
+                        returnStdout: true
+                    ).trim()
 
-                    def total = parsed.@total.toInteger()
-                    def passed = parsed.@passed.toInteger()
-                    def failed = parsed.@failed.toInteger()
-                    def skipped = parsed.@skipped.toInteger()
+                    def total = (testngLine =~ /total="(\d+)"/)[0][1]
+                    def passed = (testngLine =~ /passed="(\d+)"/)[0][1]
+                    def failed = (testngLine =~ /failed="(\d+)"/)[0][1]
+                    def skipped = (testngLine =~ /skipped="(\d+)"/)[0][1]
 
                     testSummary = """
                         <ul>
@@ -68,15 +70,15 @@ pipeline {
                 """).trim()
 
                 if (latestScreenshotFolder) {
-                    def fullScreenshotPath = "${env.SCREENSHOT_BASE_DIR}/${latestScreenshotFolder}".replace('\\', '/')
+                    def fullPath = "${env.SCREENSHOT_BASE_DIR}/${latestScreenshotFolder}".replace("\\", "/")
                     def screenshotZip = "screenshots.zip"
-                    bat "powershell Compress-Archive -Path '${fullScreenshotPath}/*' -DestinationPath '${screenshotZip}' -Force"
+                    bat "powershell Compress-Archive -Path '${fullPath}/*' -DestinationPath '${screenshotZip}' -Force"
                     if (fileExists(screenshotZip)) {
                         attachments << screenshotZip
                     }
                 }
 
-                // ✅ Zip logs
+                // ✅ Zip logs folder
                 if (powershell(returnStatus: true, script: "Test-Path '${env.LOG_DIR}'") == 0) {
                     def logsZip = "logs.zip"
                     bat "powershell Compress-Archive -Path '${env.LOG_DIR}/*' -DestinationPath '${logsZip}' -Force"
@@ -94,7 +96,7 @@ pipeline {
                 """).trim()
 
                 if (reportHtml) {
-                    reportHtml = reportHtml.replace('\\', '/').replace("${workspace}/", "")
+                    reportHtml = reportHtml.replace("\\", "/").replace("${workspace}/", "")
                     if (fileExists(reportHtml)) {
                         attachments << reportHtml
                     }
@@ -103,7 +105,7 @@ pipeline {
                 def attachmentPattern = attachments.join(',')
                 echo "📎 Email attachments: ${attachmentPattern}"
 
-                // ✅ Send email with test summary and attachments
+                // ✅ Send email
                 emailext(
                     subject: "🧪 Test Report - Build #${env.BUILD_NUMBER} [${currentBuild.currentResult}]",
                     body: """
@@ -111,7 +113,7 @@ pipeline {
                         <p>Automated test execution completed with status: <b>${currentBuild.currentResult}</b></p>
                         <h4>📊 Test Summary:</h4>
                         ${testSummary}
-                        <p>📎 Attached: HTML report, screenshots (if any), logs (if any)</p>
+                        <p>📎 Attached: HTML report, screenshots (if available), logs (if available)</p>
                         <p>📌 Download and open the HTML report manually in a browser.</p>
                         <p>Regards,<br/>Automation Framework</p>
                     """,
