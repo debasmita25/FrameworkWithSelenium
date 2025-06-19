@@ -1,8 +1,3 @@
-// ✅ Global vars to persist values into post block
-def reportHtml = ''
-def screenshotZip = ''
-def logsZip = ''
-
 pipeline {
     agent any
 
@@ -16,10 +11,12 @@ pipeline {
         LOG_DIR = "logs"
         REPORT_NAME = "Test Execution Report"
         EMAIL_TO = "debasmita25@gmail.com"
+        REPORT_HTML = ''
+        SCREENSHOT_ZIP = ''
+        LOG_ZIP = ''
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -31,136 +28,85 @@ pipeline {
                 bat "mvn clean test -Dheadless=true"
             }
         }
-
-        stage('Zip Artifacts') {
-            steps {
-                script {
-                    screenshotZip = ''
-                    logsZip = ''
-
-                    // Find latest screenshot folder
-                    def latestScreenshotFolder = powershell(returnStdout: true, script: """
-                        if (Test-Path '${env.SCREENSHOT_BASE_DIR}') {
-                            Get-ChildItem -Directory '${env.SCREENSHOT_BASE_DIR}' |
-                            Sort-Object LastWriteTime -Descending |
-                            Select-Object -First 1 |
-                            Select-Object -ExpandProperty Name
-                        }
-                    """).trim()
-
-                    if (latestScreenshotFolder) {
-                        echo "📸 Latest Screenshot Folder: ${latestScreenshotFolder}"
-                        def fullPath = "${env.SCREENSHOT_BASE_DIR}/${latestScreenshotFolder}"
-                        screenshotZip = "screenshots.zip"
-                        bat """powershell -Command "Compress-Archive -Path '${fullPath}/*' -DestinationPath '${screenshotZip}' -Force" """
-                    } else {
-                        echo "⚠️ No screenshots found."
-                    }
-
-                    // Zip logs
-                    def logExists = powershell(returnStatus: true, script: "Test-Path '${env.LOG_DIR}'")
-                    if (logExists == 0) {
-                        logsZip = "logs.zip"
-                        bat """powershell -Command "Compress-Archive -Path '${env.LOG_DIR}/*' -DestinationPath '${logsZip}' -Force" """
-                    } else {
-                        echo "⚠️ No logs folder found."
-                    }
-                }
-            }
-        }
-
-        stage('Find HTML Report') {
-            steps {
-                script {
-                    def reportFile = powershell(returnStdout: true, script: """
-                        Get-ChildItem -Path target/reports -Filter *.html |
-                        Sort-Object LastWriteTime -Descending |
-                        Select-Object -First 1 |
-                        Select-Object -ExpandProperty FullName
-                    """).trim()
-
-                    if (reportFile) {
-                        reportFile = reportFile.replace('\\', '/')
-                        reportHtml = reportFile
-                        echo "✅ Found HTML Report: ${reportHtml}"
-                    } else {
-                        echo "❌ No HTML report found."
-                        reportHtml = ''
-                    }
-                }
-            }
-        }
-
-        stage('Publish HTML Report') {
-            steps {
-                script {
-                    if (reportHtml?.trim()) {
-                        publishHTML(target: [
-                            reportDir: 'target/reports',
-                            reportFiles: reportHtml.split('/')[-1],
-                            reportName: "${env.REPORT_NAME}",
-                            reportTitles: 'Test Results',
-                            allowMissing: true,
-                            alwaysLinkToLastBuild: true,
-                            keepAll: true
-                        ])
-                    }
-                }
-            }
-        }
     }
 
     post {
-        success {
-            script {
-                sendEmail("Test Report - Build #${env.BUILD_NUMBER} SUCCESS")
-            }
-        }
-
-        failure {
-            script {
-                sendEmail("Test Report - Build #${env.BUILD_NUMBER} FAILED")
-            }
-        }
-
         always {
-            echo "📬 Email attempt completed"
+            script {
+                // --- ZIP SCREENSHOTS ---
+                def latestScreenshotFolder = powershell(returnStdout: true, script: """
+                    if (Test-Path '${env.SCREENSHOT_BASE_DIR}') {
+                        Get-ChildItem -Directory '${env.SCREENSHOT_BASE_DIR}' |
+                        Sort-Object LastWriteTime -Descending |
+                        Select-Object -First 1 |
+                        Select-Object -ExpandProperty Name
+                    }
+                """).trim()
+
+                if (latestScreenshotFolder) {
+                    echo "📸 Found screenshot folder: ${latestScreenshotFolder}"
+                    def fullPath = "${env.SCREENSHOT_BASE_DIR}/${latestScreenshotFolder}".replace('\\', '/')
+                    env.SCREENSHOT_ZIP = "screenshots.zip"
+                    bat """powershell -Command "Compress-Archive -Path '${fullPath}/*' -DestinationPath '${env.SCREENSHOT_ZIP}' -Force" """
+                } else {
+                    echo "⚠️ No screenshots found."
+                }
+
+                // --- ZIP LOGS ---
+                def logExists = powershell(returnStatus: true, script: "Test-Path '${env.LOG_DIR}'")
+                if (logExists == 0) {
+                    env.LOG_ZIP = "logs.zip"
+                    bat """powershell -Command "Compress-Archive -Path '${env.LOG_DIR}/*' -DestinationPath '${env.LOG_ZIP}' -Force" """
+                } else {
+                    echo "⚠️ No logs folder found."
+                }
+
+                // --- FIND HTML REPORT ---
+                def reportFile = powershell(returnStdout: true, script: """
+                    Get-ChildItem -Path target/reports -Filter *.html |
+                    Sort-Object LastWriteTime -Descending |
+                    Select-Object -First 1 |
+                    Select-Object -ExpandProperty FullName
+                """).trim()
+
+                if (reportFile) {
+                    reportFile = reportFile.replace('\\', '/')
+                    def ws = pwd().replace('\\', '/')
+                    def relativeReport = reportFile.replace(ws + '/', '')
+                    env.REPORT_HTML = relativeReport
+                    echo "✅ HTML report found: ${env.REPORT_HTML}"
+                } else {
+                    echo "⚠️ No HTML report found."
+                }
+
+                // --- ATTACHMENTS ---
+                def files = []
+                if (env.REPORT_HTML?.trim() && fileExists(env.REPORT_HTML)) files << env.REPORT_HTML
+                if (env.SCREENSHOT_ZIP?.trim() && fileExists(env.SCREENSHOT_ZIP)) files << env.SCREENSHOT_ZIP
+                if (env.LOG_ZIP?.trim() && fileExists(env.LOG_ZIP)) files << env.LOG_ZIP
+
+                def attachPattern = files.join(',')
+                echo "📎 Email attachments: ${attachPattern}"
+
+                // --- SEND EMAIL ---
+                emailext(
+                    subject: "🧪 Test Report - Build #${env.BUILD_NUMBER} [${currentBuild.currentResult}]",
+                    body: """
+                        <p>Hi Team,</p>
+                        <p>The automated test execution has completed with status: <b>${currentBuild.currentResult}</b></p>
+                        <ul>
+                            <li>📄 HTML Report</li>
+                            <li>🖼️ Screenshots (if any)</li>
+                            <li>📁 Logs (if any)</li>
+                        </ul>
+                        <p>📌 Download the HTML report and open in browser manually.</p>
+                        <p>Regards,<br/>Automation Framework</p>
+                    """,
+                    mimeType: 'text/html',
+                    to: "${env.EMAIL_TO}",
+                    attachmentsPattern: attachPattern
+                )
+            }
         }
     }
-}
-
-// ✅ Shared method for emailing
-def sendEmail(subjectLine) {
-    def ws = pwd().replace("\\", "/")
-    def attachments = []
-
-    if (reportHtml?.trim() && fileExists(reportHtml)) {
-        def relativeReport = reportHtml.replace(ws + "/", "")
-        attachments << relativeReport
-    }
-
-    if (screenshotZip?.trim() && fileExists(screenshotZip)) {
-        attachments << screenshotZip
-    }
-
-    if (logsZip?.trim() && fileExists(logsZip)) {
-        attachments << logsZip
-    }
-
-    def attachString = attachments.join(',')
-    echo "📎 Will attach: ${attachString}"
-
-    emailext(
-        subject: subjectLine,
-        body: """
-            <p>Hi Team,</p>
-            <p>The test execution is complete: <b>${subjectLine}</b></p>
-            <p>📎 Attached: HTML report, screenshots, and logs (if available).</p>
-            <p>⚠️ Download the HTML report and open it locally in a browser.</p>
-            <p>Regards,<br/>Automation Framework</p>
-        """,
-        mimeType: 'text/html',
-        to: "${env.EMAIL_TO}",
-        attachmentsPattern: attachString
-    )
 }
