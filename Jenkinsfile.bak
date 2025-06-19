@@ -113,13 +113,13 @@ pipeline {
     post {
         success {
             script {
-                sendEmail("✅ Test Report - Build #${env.BUILD_NUMBER} SUCCESS")
+                sendEmail("Test Report - Build #${env.BUILD_NUMBER} SUCCESS")
             }
         }
 
         failure {
             script {
-                sendEmail("❌ Test Report - Build #${env.BUILD_NUMBER} FAILED")
+                sendEmail("Test Report - Build #${env.BUILD_NUMBER} FAILED")
             }
         }
 
