@@ -103,3 +103,106 @@
 2025-06-20 11:56:22 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - username and password entered and submitted
 2025-06-20 11:56:22 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - product name displayed
 2025-06-20 11:56:24 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - onTestSuccess
+2025-06-20 15:06:45 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - >> onTestStart triggered
+2025-06-20 15:06:48 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - Launching  : chrome
+2025-06-20 15:06:49 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - URL launched
+2025-06-20 15:06:49 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - Enter username : standard_user
+2025-06-20 15:06:49 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - Enter password : secret_sauce
+2025-06-20 15:06:50 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - Launching  : firefox
+2025-06-20 15:06:50 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - username and password entered and submitted
+2025-06-20 15:06:50 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - product name displayed
+2025-06-20 15:06:51 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - URL launched
+2025-06-20 15:06:51 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - Enter username : standard_user
+2025-06-20 15:06:51 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - Enter password : secret_sauce
+2025-06-20 15:06:51 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - App Logo Present
+2025-06-20 15:06:51 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - Browser closed...
+2025-06-20 15:06:51 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - onTestSuccess
+2025-06-20 15:06:52 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - username and password entered and submitted
+2025-06-20 15:06:52 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - product name displayed
+2025-06-20 15:06:52 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - >> onTestStart triggered
+2025-06-20 15:06:53 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - App Logo Present
+2025-06-20 15:06:53 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - Browser closed...
+2025-06-20 15:06:53 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - onTestSuccess
+2025-06-20 15:06:53 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - Launching  : edge
+2025-06-20 15:06:54 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - URL launched
+2025-06-20 15:06:54 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - Enter username : standard_user
+2025-06-20 15:06:54 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - Enter password : secret_sauce
+2025-06-20 15:06:54 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - username and password entered and submitted
+2025-06-20 15:06:54 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - product name displayed
+2025-06-20 15:06:55 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - Launching  : chrome
+2025-06-20 15:06:55 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - >> onTestStart triggered
+2025-06-20 15:06:55 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - URL launched
+2025-06-20 15:06:55 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - Enter username : visual_user
+2025-06-20 15:06:55 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - Enter password : secret_sauce
+2025-06-20 15:06:55 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - App Logo Present
+2025-06-20 15:06:55 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - Browser closed...
+2025-06-20 15:06:55 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - onTestSuccess
+2025-06-20 15:06:56 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - username and password entered and submitted
+2025-06-20 15:06:56 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - product name displayed
+2025-06-20 15:06:57 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - App Logo Present
+2025-06-20 15:06:57 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - Browser closed...
+2025-06-20 15:06:57 [TestNG-tests-1] INFO  com.saucelab.test.TestClass1 - onTestSuccess
+2025-06-20 15:06:57 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - >> onTestStart triggered
+2025-06-20 15:06:57 [TestNG-tests-1] INFO  com.saucelab.test.FailedTestClass - >> onTestStart triggered
+2025-06-20 15:06:58 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - Launching  : firefox
+2025-06-20 15:06:59 [TestNG-tests-1] INFO  com.saucelab.test.FailedTestClass - Launching  : chrome
+2025-06-20 15:07:00 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - URL launched
+2025-06-20 15:07:00 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - Enter username : visual_user
+2025-06-20 15:07:00 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - Enter password : secret_sauce
+2025-06-20 15:07:01 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - Launching  : edge
+2025-06-20 15:07:01 [TestNG-tests-1] INFO  com.saucelab.test.FailedTestClass - URL Launched
+2025-06-20 15:07:01 [TestNG-tests-1] INFO  com.saucelab.test.FailedTestClass - onTest failure
+2025-06-20 15:07:01 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - username and password entered and submitted
+2025-06-20 15:07:01 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - product name displayed
+2025-06-20 15:07:01 [TestNG-tests-1] INFO  com.saucelab.test.FailedTestClass - Screenshot is taken
+2025-06-20 15:07:01 [TestNG-tests-1] INFO  com.saucelab.test.FailedTestClass - onTest failure
+2025-06-20 15:07:02 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - App Logo Present
+2025-06-20 15:07:02 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - Browser closed...
+2025-06-20 15:07:02 [TestNG-tests-3] INFO  com.saucelab.test.TestClass1 - onTestSuccess
+2025-06-20 15:07:02 [TestNG-PoolService-1] INFO  com.practice.rough.FirstTest1 - >> onTestStart triggered
+2025-06-20 15:07:02 [TestNG-PoolService-0] INFO  com.practice.rough.FirstTest1 - >> onTestStart triggered
+2025-06-20 15:07:02 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - URL launched
+2025-06-20 15:07:02 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - Enter username : visual_user
+2025-06-20 15:07:02 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - Enter password : secret_sauce
+2025-06-20 15:07:03 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - username and password entered and submitted
+2025-06-20 15:07:03 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - product name displayed
+2025-06-20 15:07:04 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - App Logo Present
+2025-06-20 15:07:04 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - Browser closed...
+2025-06-20 15:07:04 [TestNG-tests-2] INFO  com.saucelab.test.TestClass1 - onTestSuccess
+2025-06-20 15:07:05 [TestNG-PoolService-0] INFO  com.practice.rough.FirstTest1 - Launching  : chrome
+2025-06-20 15:07:07 [TestNG-PoolService-0] INFO  com.practice.rough.FirstTest1 - onTestSuccess
+2025-06-20 15:07:07 [TestNG-PoolService-1] INFO  com.practice.rough.FirstTest1 - Launching  : firefox
+2025-06-20 15:07:20 [TestNG-PoolService-1] INFO  com.practice.rough.FirstTest1 - onTest failure
+2025-06-20 15:07:20 [TestNG-PoolService-1] INFO  com.practice.rough.FirstTest1 - Screenshot is taken
+2025-06-20 15:07:20 [TestNG-PoolService-1] INFO  com.practice.rough.FirstTest1 - onTest failure
+2025-06-20 15:07:21 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - >> onTestStart triggered
+2025-06-20 15:07:22 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - Launching  : chrome
+2025-06-20 15:07:23 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - URL Launched
+2025-06-20 15:07:23 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - Username and Password entered and submitted
+2025-06-20 15:07:24 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - app Logo is asserted true
+2025-06-20 15:07:24 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - onTestSuccess
+2025-06-20 15:07:24 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - >> onTestStart triggered
+2025-06-20 15:07:27 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - Launching  : firefox
+2025-06-20 15:07:28 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - URL Launched
+2025-06-20 15:07:28 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - Username and Password entered and submitted
+2025-06-20 15:07:39 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - onTest failure
+2025-06-20 15:07:39 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - Screenshot is taken
+2025-06-20 15:07:39 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - onTest failure
+2025-06-20 15:07:40 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - >> onTestStart triggered
+2025-06-20 15:07:41 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - Launching  : chrome
+2025-06-20 15:07:42 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - URL Launched
+2025-06-20 15:07:42 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - onTest failure
+2025-06-20 15:07:42 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - Screenshot is taken
+2025-06-20 15:07:42 [TestNG-tests-1] INFO  com.practice.rough.FirstTest2 - onTest failure
+2025-06-20 15:07:42 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - >> onTestStart triggered
+2025-06-20 15:07:43 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - Launching  : chrome
+2025-06-20 15:07:44 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - URL launched
+2025-06-20 15:07:44 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - username and password entered and submitted
+2025-06-20 15:07:44 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - product name displayed
+2025-06-20 15:07:45 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - onTestSuccess
+2025-06-20 15:07:45 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - >> onTestStart triggered
+2025-06-20 15:07:47 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - Launching  : edge
+2025-06-20 15:07:47 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - URL launched
+2025-06-20 15:07:48 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - username and password entered and submitted
+2025-06-20 15:07:48 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - product name displayed
+2025-06-20 15:07:50 [TestNG-tests-1] INFO  com.practice.rough.FirstTest3 - onTestSuccess

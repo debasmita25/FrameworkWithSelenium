@@ -42,13 +42,13 @@ pipeline {
                 // ✅ Extract test summary from test-output.log
                 def testSummary = ""
                 if (fileExists('test-output.log')) {
-                    def logContent = readFile('test-output.log')
-                    def match = logContent =~ /Tests run:\s*\d+,\s*Failures:\s*\d+,\s*Errors:\s*\d+,\s*Skipped:\s*\d+/
-                   if (match.find()) {
-                   testSummary = match[0]
-                   } else {
-                   testSummary = "Tests run: N/A"
-                  }
+                def logContent = readFile('test-output.log')
+                def match = logContent =~ /.*Tests run:\s*\d+,\s*Failures:\s*\d+,\s*Errors:\s*\d+,\s*Skipped:\s*\d+/
+                if (match.find()) {
+                testSummary = match[0]
+                } else {
+                testSummary = "Tests run: N/A"
+                 }
                 }
 
                 // ✅ Calculate build info

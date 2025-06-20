@@ -9,27 +9,6 @@
     <parameter name="browser" value="chrome"/>
     <parameter name="testurl" value="https://www.saucedemo.com/"/>
     <classes>
-      <class name="com.practice.rough.FirstTest2">
-        <methods>
-          <include name="flushExtentReport"/>
-          <include name="initializeExtentReport"/>
-          <include name="testFail" invocation-numbers="0"/>
-          <include name="quitBrowser"/>
-          <include name="doLogin" invocation-numbers="0 1"/>
-          <include name="removeLogger"/>
-          <include name="setupLogger"/>
-        </methods>
-      </class> <!-- com.practice.rough.FirstTest2 -->
-      <class name="com.saucelab.test.FailedTestClass">
-        <methods>
-          <include name="flushExtentReport"/>
-          <include name="initializeExtentReport"/>
-          <include name="quitBrowser"/>
-          <include name="testFail"/>
-          <include name="removeLogger"/>
-          <include name="setupLogger"/>
-        </methods>
-      </class> <!-- com.saucelab.test.FailedTestClass -->
       <class name="com.practice.rough.FirstTest1">
         <methods>
           <include name="flushExtentReport"/>
@@ -40,6 +19,27 @@
           <include name="doLogin" invocation-numbers="1"/>
         </methods>
       </class> <!-- com.practice.rough.FirstTest1 -->
+      <class name="com.saucelab.test.FailedTestClass">
+        <methods>
+          <include name="flushExtentReport"/>
+          <include name="initializeExtentReport"/>
+          <include name="quitBrowser"/>
+          <include name="testFail"/>
+          <include name="removeLogger"/>
+          <include name="setupLogger"/>
+        </methods>
+      </class> <!-- com.saucelab.test.FailedTestClass -->
+      <class name="com.practice.rough.FirstTest2">
+        <methods>
+          <include name="flushExtentReport"/>
+          <include name="initializeExtentReport"/>
+          <include name="testFail" invocation-numbers="0"/>
+          <include name="quitBrowser"/>
+          <include name="doLogin" invocation-numbers="1"/>
+          <include name="removeLogger"/>
+          <include name="setupLogger"/>
+        </methods>
+      </class> <!-- com.practice.rough.FirstTest2 -->
     </classes>
   </test> <!-- Test1(failed) -->
 </suite> <!-- Failed suite [Suite] -->
