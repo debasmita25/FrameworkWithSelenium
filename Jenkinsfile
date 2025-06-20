@@ -22,7 +22,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                bat "mvn clean test -Dheadless=true"
+                bat "mvn clean test -Dheadless=true | tee test-output.log"
             }
         }
     }
@@ -33,8 +33,40 @@ pipeline {
                 def attachments = []
                 def workspace = pwd().replace('\\', '/')
 
-                // ✅ Zip latest screenshots folder
-                def screenshotZip = ""
+                // ✅ Extract test summary from test-output.log
+                def testSummary = ""
+                if (fileExists('test-output.log')) {
+                    def logContent = readFile('test-output.log')
+                    def match = logContent =~ /Tests run:\s*\d+,\s*Failures:\s*\d+,\s*Errors:\s*\d+,\s*Skipped:\s*\d+/
+                    if (match) {
+                        testSummary = match[0]
+                    } else {
+                        testSummary = "Tests run: N/A"
+                    }
+                }
+
+                // ✅ Calculate build info
+                def buildStart = new Date(currentBuild.getStartTimeInMillis())
+                def formattedDate = buildStart.format("EEE, dd MMM yyyy HH:mm:ss Z", TimeZone.getTimeZone('IST'))
+                def durationMillis = System.currentTimeMillis() - currentBuild.getStartTimeInMillis()
+                def minutes = (int)(durationMillis / 60000)
+                def seconds = (int)((durationMillis % 60000) / 1000)
+                def durationStr = "${minutes} min ${seconds} sec and counting"
+                def cause = currentBuild.getBuildCauses()[0]?.shortDescription ?: 'Manual trigger'
+
+                // ✅ Build Summary Note for Email
+                def buildNote = """
+                    <pre>
+Build Summary:
+${testSummary}
+Project: ${env.JOB_NAME}
+Date: ${formattedDate}
+Duration: ${durationStr}
+Cause: ${cause}
+                    </pre>
+                """
+
+                // ✅ Zip latest screenshots
                 def latestScreenshotFolder = powershell(returnStdout: true, script: """
                     if (Test-Path '${env.SCREENSHOT_BASE_DIR}') {
                         Get-ChildItem -Directory '${env.SCREENSHOT_BASE_DIR}' |
@@ -46,25 +78,26 @@ pipeline {
 
                 if (latestScreenshotFolder) {
                     def fullScreenshotPath = "${env.SCREENSHOT_BASE_DIR}/${latestScreenshotFolder}".replace('\\', '/')
-                    screenshotZip = "screenshots.zip"
+                    def screenshotZip = "screenshots.zip"
+                    bat "if exist ${screenshotZip} del ${screenshotZip}"
                     bat "powershell Compress-Archive -Path '${fullScreenshotPath}/*' -DestinationPath '${screenshotZip}' -Force"
                     if (fileExists(screenshotZip)) {
                         attachments << screenshotZip
                     }
                 }
 
-                // ✅ Zip logs folder
-                def logsZip = ""
+                // ✅ Zip logs
+                def logsZip = "logs.zip"
                 def logExists = powershell(returnStatus: true, script: "Test-Path '${env.LOG_DIR}'")
                 if (logExists == 0) {
-                    logsZip = "logs.zip"
+                    bat "if exist ${logsZip} del ${logsZip}"
                     bat "powershell Compress-Archive -Path '${env.LOG_DIR}/*' -DestinationPath '${logsZip}' -Force"
                     if (fileExists(logsZip)) {
                         attachments << logsZip
                     }
                 }
 
-                // ✅ Find latest HTML report
+                // ✅ Latest HTML report
                 def reportHtml = powershell(returnStdout: true, script: """
                     if (Test-Path '${env.REPORT_DIR}') {
                         Get-ChildItem -Path '${env.REPORT_DIR}' -Filter *.html |
@@ -81,16 +114,16 @@ pipeline {
                     }
                 }
 
-                // ✅ Build attachment pattern
                 def attachmentPattern = attachments.join(',')
-                echo "📎 Email attachments: ${attachmentPattern}"
+                echo "📎 Email attachments: ${attachmentPattern ?: 'None'}"
 
-                // ✅ Send email with attachments
+                // ✅ Send Email
                 emailext(
                     subject: "🧪 Test Report - Build #${env.BUILD_NUMBER} [${currentBuild.currentResult}]",
                     body: """
                         <p>Hi Team,</p>
                         <p>Automated test execution completed with status: <b>${currentBuild.currentResult}</b></p>
+                        ${buildNote}
                         <p>📎 Attached: HTML report, screenshots (if any), logs (if any)</p>
                         <p>📌 Please download and open the HTML report in a browser.</p>
                         <p>Regards,<br/>Automation Framework</p>
