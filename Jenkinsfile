@@ -29,26 +29,44 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-               bat "powershell -Command \"& { mvn clean test -P${params.TEST_ENV} -DsuiteXmlFile='${params.TEST_SUITE}' | Tee-Object -FilePath test-output.log }\""
+                bat "powershell -Command \"& { mvn clean test -P${params.TEST_ENV} -DsuiteXmlFile='${params.TEST_SUITE}' | Tee-Object -FilePath test-output.log }\""
             }
         }
     }
+
     post {
         always {
             script {
                 def attachments = []
                 def workspace = pwd().replace('\\', '/')
 
-                // ✅ Extract test summary from test-output.log
+                // ✅ Latest HTML report
+                def reportHtml = powershell(returnStdout: true, script: """
+                    if (Test-Path '${env.REPORT_DIR}') {
+                        Get-ChildItem -Path '${env.REPORT_DIR}' -Filter *.html |
+                        Sort-Object LastWriteTime -Descending |
+                        Select-Object -First 1 |
+                        Select-Object -ExpandProperty FullName
+                    }
+                """).trim()
+
                 def testSummary = ""
-                if (fileExists('test-output.log')) {
-                def logContent = readFile('test-output.log')
-                def match = logContent =~ /.*Tests run:\s*\d+,\s*Failures:\s*\d+,\s*Errors:\s*\d+,\s*Skipped:\s*\d+/
-                if (match.find()) {
-                testSummary = match[0]
+                if (reportHtml && fileExists(reportHtml)) {
+                    reportHtml = reportHtml.replace('\\', '/').replace("${workspace}/", "")
+                    def htmlContent = readFile(reportHtml)
+
+                    def passMatch = htmlContent =~ /<p class="m-b-0 text-pass">Tests Passed<\/p>\s*<h3>(\d+)<\/h3>/
+                    def failMatch = htmlContent =~ /<p class="m-b-0 text-fail">Tests Failed<\/p>\s*<h3>(\d+)<\/h3>/
+
+                    def passed = passMatch.find() ? passMatch[0][1] : "0"
+                    def failed = failMatch.find() ? failMatch[0][1] : "0"
+
+                    testSummary = "Tests Passed: ${passed}, Tests Failed: ${failed}"
+                    attachments << reportHtml
+                    echo "✅ Extracted test summary from HTML: ${testSummary}"
                 } else {
-                testSummary = "Tests run: N/A"
-                 }
+                    echo "❌ HTML report not found at: ${reportHtml}"
+                    testSummary = "Tests run: N/A"
                 }
 
                 // ✅ Calculate build info
@@ -57,7 +75,7 @@ pipeline {
                 def durationMillis = System.currentTimeMillis() - currentBuild.getStartTimeInMillis()
                 def minutes = (int)(durationMillis / 60000)
                 def seconds = (int)((durationMillis % 60000) / 1000)
-                def durationStr = "${minutes} min ${seconds} sec and counting"
+                def durationStr = "${minutes} min ${seconds} sec"
                 def cause = currentBuild.getBuildCauses()[0]?.shortDescription ?: 'Manual trigger'
 
                 // ✅ Build Summary Note for Email
@@ -103,23 +121,7 @@ Cause: ${cause}
                     }
                 }
 
-                // ✅ Latest HTML report
-                def reportHtml = powershell(returnStdout: true, script: """
-                    if (Test-Path '${env.REPORT_DIR}') {
-                        Get-ChildItem -Path '${env.REPORT_DIR}' -Filter *.html |
-                        Sort-Object LastWriteTime -Descending |
-                        Select-Object -First 1 |
-                        Select-Object -ExpandProperty FullName
-                    }
-                """).trim()
-
-                if (reportHtml) {
-                    reportHtml = reportHtml.replace('\\', '/').replace("${workspace}/", "")
-                    if (fileExists(reportHtml)) {
-                        attachments << reportHtml
-                    }
-                }
-
+				  
                 def attachmentPattern = attachments.join(',')
                 echo "📎 Email attachments: ${attachmentPattern ?: 'None'}"
 
