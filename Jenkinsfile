@@ -29,7 +29,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                bat powershell -Command "& { mvn clean test -Pqa -DsuiteXmlFile='testng-smoke.xml' | Tee-Object -FilePath test-output.log }"
+               bat "powershell -Command \"& { mvn clean test -P${params.TEST_ENV} -DsuiteXmlFile='${params.TEST_SUITE}' | Tee-Object -FilePath test-output.log }\""
             }
         }
     }
