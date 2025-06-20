@@ -110,17 +110,20 @@ Cause: ${cause}
                     }
                 }
 
-                // ✅ Zip logs
-                def logsZip = "logs.zip"
-                def logExists = powershell(returnStatus: true, script: "Test-Path '${env.LOG_DIR}'")
-                if (logExists == 0) {
-                    bat "if exist ${logsZip} del ${logsZip}"
-                    bat "powershell Compress-Archive -Path '${env.LOG_DIR}/*' -DestinationPath '${logsZip}' -Force"
-                    if (fileExists(logsZip)) {
-                        attachments << logsZip
-                    }
-                }
+                // ✅ Zip only logs/app.log
+def logsZip = "app-log.zip"
+def appLogPath = "${env.LOG_DIR}/app.log".replace('\\', '/')
 
+if (fileExists(appLogPath)) {
+    bat "if exist ${logsZip} del ${logsZip}"
+    bat "powershell Compress-Archive -Path '${appLogPath}' -DestinationPath '${logsZip}' -Force"
+    if (fileExists(logsZip)) {
+        attachments << logsZip
+    }
+} else {
+    echo "❌ app.log not found at: ${appLogPath}"
+}
+                
 				  
                 def attachmentPattern = attachments.join(',')
                 echo "📎 Email attachments: ${attachmentPattern ?: 'None'}"
