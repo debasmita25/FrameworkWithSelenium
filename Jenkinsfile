@@ -14,19 +14,25 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('Show Input') {
             steps {
+                echo "User selected ENVIRONMENT = ${params.TEST_ENV}"
+                echo "User selected SUITE = ${params.TEST_SUITE}" 
+            }
+        }
+
+        stage('Checkout') {
+            steps {   
                 checkout scm
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat "mvn clean test -Dheadless=true | tee test-output.log"
+                bat "powershell -Command \"mvn clean test -P${params.TEST_ENV} -DsuiteXmlFile=${params.TEST_SUITE} | Tee-Object -FilePath test-output.log\""
             }
         }
     }
-
     post {
         always {
             script {
@@ -38,11 +44,11 @@ pipeline {
                 if (fileExists('test-output.log')) {
                     def logContent = readFile('test-output.log')
                     def match = logContent =~ /Tests run:\s*\d+,\s*Failures:\s*\d+,\s*Errors:\s*\d+,\s*Skipped:\s*\d+/
-                    if (match) {
-                        testSummary = match[0]
-                    } else {
-                        testSummary = "Tests run: N/A"
-                    }
+                   if (match.find()) {
+                   testSummary = match[0]
+                   } else {
+                   testSummary = "Tests run: N/A"
+                  }
                 }
 
                 // ✅ Calculate build info
