@@ -11,9 +11,12 @@
 		<classes>
 			<class name="com.saucelab.test.TestClass1" />
             <class name="com.saucelab.test.FailedTestClass"/>
+            <class name="com.practice.rough.FirstTest1"/>
+            <class name="com.practice.rough.FirstTest2"/>
+            <class name="com.practice.rough.FirstTest3"/> 
 		</classes>
 	</test> <!-- Test -->
-	<test name="Test2" enabled="false" >
+	<test name="Test2" enabled="true" >
 		<parameter name="os" value="windows"></parameter>
 		<parameter name="browser" value="edge"></parameter>
 		<parameter name="testurl" value="https://www.saucedemo.com/"></parameter>
@@ -21,7 +24,7 @@
 			<class name="com.saucelab.test.TestClass1" />
 		</classes>
 	</test> <!-- Test -->
-	<test name="Test3" enabled="false">
+	<test name="Test3" enabled="true">
 		<parameter name="os" value="windows"></parameter>
 		<parameter name="browser" value="firefox"></parameter>
 		<parameter name="testurl" value="https://www.saucedemo.com/"></parameter>

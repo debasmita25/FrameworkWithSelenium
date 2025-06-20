@@ -119,13 +119,13 @@ Cause: ${cause}
 
                 // ✅ Send Email
                 emailext(
-                    subject: "🧪 Test Report - Build #${env.BUILD_NUMBER} [${currentBuild.currentResult}]",
+                    subject: "Test Report - Build #${env.BUILD_NUMBER} [${currentBuild.currentResult}]",
                     body: """
                         <p>Hi Team,</p>
                         <p>Automated test execution completed with status: <b>${currentBuild.currentResult}</b></p>
                         ${buildNote}
-                        <p>📎 Attached: HTML report, screenshots (if any), logs (if any)</p>
-                        <p>📌 Please download and open the HTML report in a browser.</p>
+                        <p>Attached: HTML report, screenshots (if any), logs (if any)</p>
+                        <p>Please download and open the HTML report in a browser.</p>
                         <p>Regards,<br/>Automation Framework</p>
                     """,
                     mimeType: 'text/html',

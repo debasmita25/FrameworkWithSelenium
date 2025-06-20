@@ -33,9 +33,6 @@ public class FirstTest2 extends BaseTest {
 		Assert.assertTrue(appLogo.isDisplayed());
 		info("app Logo is asserted true");
 		// quitBrowser();
-		sf = new SoftAssert();
-		sf.fail();
-		sf.assertAll();
 
 	}
 
